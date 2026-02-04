@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Our Little List 💗</title>
+<title>Our Bucket List 💗</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -22,7 +22,7 @@ body {
 .container {
   width: 92%;
   max-width: 620px;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.45);
   backdrop-filter: blur(12px);
   padding: 40px;
   border-radius: 28px;
@@ -37,8 +37,15 @@ h2 {
 .instructions {
   text-align: center;
   font-size: 1rem;
-  margin-bottom: 28px;
+  margin-bottom: 26px;
   line-height: 1.6;
+}
+
+.instructions small {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.85;
 }
 
 .list {
@@ -72,17 +79,27 @@ button {
   font-size: 1rem;
   cursor: pointer;
 }
+
+.error {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: #7a1f2c;
+  display: none;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-  <h2>Our Little List 💗</h2>
+  <h2>Our Bucket List 💗</h2>
 
   <div class="instructions">
-    Let’s write things we want to do together.<br>
-    No pressure. No rules. Just us.
+    Let’s write things we want to do together.  
+    <br>All 10. No skipping.
+    <small>
+      This page remembers what you type 😌
+    </small>
   </div>
 
   <div class="list">
@@ -99,13 +116,40 @@ button {
   </div>
 
   <div class="footer">
-    <button onclick="goNext()">Okay 😌</button>
+    <button onclick="goNext()">Proceed 💌</button>
+    <div class="error" id="error">
+      All 10 items. Don’t test me 😌
+    </div>
   </div>
 </div>
 
 <script>
+const inputs = document.querySelectorAll("input");
+const error = document.getElementById("error");
+
+/* AUTO SAVE */
+inputs.forEach((input, index) => {
+  const saved = localStorage.getItem("bucket_" + index);
+  if (saved) input.value = saved;
+
+  input.addEventListener("input", () => {
+    localStorage.setItem("bucket_" + index, input.value);
+  });
+});
+
 function goNext() {
-  window.location.href = "vday.html";
+  let allFilled = true;
+
+  inputs.forEach(input => {
+    if (!input.value.trim()) allFilled = false;
+  });
+
+  if (!allFilled) {
+    error.style.display = "block";
+    return;
+  }
+
+  window.location.href = "/vday-proposal-for-my-baby/scratchit.html";
 }
 </script>
 
