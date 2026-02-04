@@ -21,7 +21,7 @@ body {
   50% { filter: brightness(1.08); }
 }
 
-/* ===== FLOATING HEARTS ===== */
+/* FLOATING HEARTS */
 .heart {
   position: fixed;
   bottom: -20px;
@@ -37,7 +37,7 @@ body {
   }
 }
 
-/* ===== MODAL ===== */
+/* MODAL */
 .modal {
   position: fixed;
   inset: 0;
@@ -55,16 +55,6 @@ body {
   border-radius: 26px;
   text-align: center;
   box-shadow: 0 30px 80px rgba(0,0,0,0.25);
-  animation: pop 0.4s ease;
-}
-
-@keyframes pop {
-  from { transform: scale(0.85); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.modal-box h2 {
-  margin-bottom: 12px;
 }
 
 .modal-box button {
@@ -74,18 +64,17 @@ body {
   border-radius: 30px;
   background: #ff4d6d;
   color: white;
-  font-size: 1rem;
   cursor: pointer;
 }
 
-/* ===== GAME ===== */
+/* GAME */
 .game {
   position: relative;
   width: 100vw;
   height: 100vh;
 }
 
-/* ===== CLAW ===== */
+/* CLAW */
 .claw {
   position: absolute;
   top: 20px;
@@ -106,7 +95,7 @@ body {
   transform: translateX(-50%);
 }
 
-/* ===== PRIZE ===== */
+/* PRIZE */
 .prize {
   position: absolute;
   bottom: 60px;
@@ -119,7 +108,7 @@ body {
   50% { transform: rotate(6deg); }
 }
 
-/* ===== POPUP ===== */
+/* POPUP */
 .popup {
   position: fixed;
   inset: 0;
@@ -158,7 +147,7 @@ body {
     <h2>Claw Machine 💕</h2>
     <p>
       Move the claw left & right.<br><br>
-      Press <b>SPACE</b> or click to drop it 🤏<br><br>
+      Click or press <b>SPACE</b> to drop it 🤏<br><br>
       Collect all 5 prizes 💝
     </p>
     <button onclick="startGame()">Insert Coin 💖</button>
@@ -216,6 +205,7 @@ function startGame() {
 }
 
 function spawnPrize() {
+  if (!gifts.length) return;
   const prize = gifts.shift();
   const el = document.createElement("div");
   el.className = "prize";
@@ -227,9 +217,10 @@ function spawnPrize() {
 
 function dropClaw() {
   if (dropping) return;
-  dropping = true;
-
   const prize = document.querySelector(".prize");
+  if (!prize) return;
+
+  dropping = true;
   let down = 20;
 
   const fall = setInterval(() => {
@@ -240,11 +231,7 @@ function dropClaw() {
     const c = claw.getBoundingClientRect();
     const p = prize.getBoundingClientRect();
 
-    if (
-      c.bottom >= p.top &&
-      c.left < p.right &&
-      c.right > p.left
-    ) {
+    if (c.bottom >= p.top && c.left < p.right && c.right > p.left) {
       clearInterval(fall);
       prize.remove();
       collected++;
@@ -272,7 +259,7 @@ function showGift(text) {
       <p>${text}</p>
       ${
         collected === 5
-          ? `<button onclick="location.href='scratch.html'">That was cute, what next? 😌</button>`
+          ? `<button onclick="location.href='bucket.html'">That was cute, what next? 😌</button>`
           : `<button onclick="this.closest('.popup').remove(); resetClaw(); spawnPrize();">Keep playing 🎮</button>`
       }
     </div>
