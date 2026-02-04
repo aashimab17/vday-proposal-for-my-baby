@@ -27,9 +27,9 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-auto-rows: 35vh;
-      gap: 14px;
+      gap: 16px;
       padding: 24px;
-      animation: slow-pan 70s linear infinite;
+      animation: slow-pan 80s linear infinite;
     }
 
     .background img {
@@ -37,27 +37,27 @@
       height: 100%;
       object-fit: cover;
       border-radius: 22px;
-      filter: blur(3px) brightness(0.55);
-      opacity: 0.85;
+      filter: blur(1.5px) brightness(0.85);
+      opacity: 0.95;
     }
 
     .background img:nth-child(3n) {
-      filter: blur(5px) brightness(0.45);
+      filter: blur(2.5px) brightness(0.8);
     }
 
     @keyframes slow-pan {
       from { transform: translateX(0); }
-      to { transform: translateX(-80px); }
+      to { transform: translateX(-60px); }
     }
 
-    /* ===== DARK GRADIENT OVERLAY ===== */
+    /* ===== LIGHTER OVERLAY ===== */
     .overlay {
       position: fixed;
       inset: 0;
       z-index: 2;
       background: linear-gradient(
-        rgba(0,0,0,0.65),
-        rgba(0,0,0,0.85)
+        rgba(0,0,0,0.3),
+        rgba(0,0,0,0.45)
       );
     }
 
@@ -75,17 +75,17 @@
     .text-box {
       max-width: 760px;
       padding: 55px 60px;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(14px);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
       border-radius: 32px;
       text-align: center;
-      box-shadow: 0 40px 90px rgba(0,0,0,0.7);
+      box-shadow: 0 40px 90px rgba(0,0,0,0.5);
     }
 
     .text-box p {
       font-size: 1.15rem;
       line-height: 2;
-      opacity: 0.92;
+      opacity: 0.97;
       margin-bottom: 22px;
     }
 
@@ -121,7 +121,7 @@
 
 <body>
 
-  <!-- BACKGROUND IMAGES -->
+  <!-- BACKGROUND IMAGES (12 ONLY) -->
   <div class="background">
     <img src="assets/images/photo1.jpg">
     <img src="assets/images/photo2.jpg">
