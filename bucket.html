@@ -31,21 +31,14 @@ body {
 
 h2 {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .instructions {
   text-align: center;
   font-size: 1rem;
-  margin-bottom: 26px;
+  margin-bottom: 28px;
   line-height: 1.6;
-}
-
-.instructions small {
-  display: block;
-  margin-top: 8px;
-  font-size: 0.85rem;
-  opacity: 0.85;
 }
 
 .list {
@@ -79,13 +72,6 @@ button {
   font-size: 1rem;
   cursor: pointer;
 }
-
-.error {
-  margin-top: 14px;
-  font-size: 0.9rem;
-  color: #7a1f2c;
-  display: none;
-}
 </style>
 </head>
 
@@ -95,11 +81,9 @@ button {
   <h2>Our Bucket List 💗</h2>
 
   <div class="instructions">
-    Let’s write things we want to do together.  
-    <br>All 10. No skipping.
-    <small>
-      This page remembers what you type 😌
-    </small>
+    Things we want to do together.<br>
+    Big, small, silly, serious.<br>
+    Just us.
   </div>
 
   <div class="list">
@@ -116,18 +100,14 @@ button {
   </div>
 
   <div class="footer">
-    <button onclick="goNext()">Proceed 💌</button>
-    <div class="error" id="error">
-      All 10 items. Don’t test me 😌
-    </div>
+    <button onclick="goNext()">Okay 😌💌</button>
   </div>
 </div>
 
 <script>
 const inputs = document.querySelectorAll("input");
-const error = document.getElementById("error");
 
-/* AUTO SAVE */
+/* quiet autosave (no pressure, no warnings) */
 inputs.forEach((input, index) => {
   const saved = localStorage.getItem("bucket_" + index);
   if (saved) input.value = saved;
@@ -138,17 +118,6 @@ inputs.forEach((input, index) => {
 });
 
 function goNext() {
-  let allFilled = true;
-
-  inputs.forEach(input => {
-    if (!input.value.trim()) allFilled = false;
-  });
-
-  if (!allFilled) {
-    error.style.display = "block";
-    return;
-  }
-
   window.location.href = "/vday-proposal-for-my-baby/scratchit.html";
 }
 </script>
