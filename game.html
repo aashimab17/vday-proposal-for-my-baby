@@ -1,222 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Catch the Love</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  background: radial-gradient(circle at top, #1a001f, #000);
-  font-family: 'Poppins', sans-serif;
-  color: white;
-  overflow: hidden;
-}
-
-/* ===== INSTRUCTIONS MODAL ===== */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.modal-box {
-  max-width: 420px;
-  padding: 36px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 24px;
-  text-align: center;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-}
-
-.modal-box h2 {
-  margin-bottom: 16px;
-}
-
-.modal-box p {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  opacity: 0.9;
-}
-
-.modal-box button {
-  margin-top: 26px;
-  padding: 12px 34px;
-  border: none;
-  border-radius: 30px;
-  background: #ff4d6d;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-/* ===== GAME AREA ===== */
-.game {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* ===== CLAW ===== */
-.claw {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 3rem;
-  transition: left 0.1s ease;
-}
-
-/* ===== FALLING EMOJIS ===== */
-.emoji {
-  position: absolute;
-  top: -50px;
-  font-size: 2.2rem;
-  animation: fall linear forwards;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(110vh);
-  }
-}
-
-/* ===== GIFT POPUP ===== */
-.gift-popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-}
-
-.gift-box {
-  max-width: 360px;
-  padding: 34px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 26px;
-  text-align: center;
-  backdrop-filter: blur(14px);
-  animation: pop 0.4s ease;
-}
-
-@keyframes pop {
-  from { transform: scale(0.85); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.gift-box h3 {
-  margin-bottom: 14px;
-}
-
-.gift-box p {
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.gift-box button {
-  margin-top: 24px;
-  padding: 10px 28px;
-  border: none;
-  border-radius: 28px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
-}
-</style>
-</head>
-
-<body>
-
-<!-- INSTRUCTIONS -->
-<div class="modal" id="instructions">
-  <div class="modal-box">
-    <h2>How this works 🎮</h2>
-    <p>
-      Move the basket to catch falling emojis.<br><br>
-      Every emoji unlocks a gift just for you 💝<br>
-      Catch as many as you want.
-    </p>
-    <button onclick="startGame()">I get it 😌</button>
-  </div>
-</div>
-
-<!-- GAME -->
-<div class="game" id="game">
-  <div class="claw" id="claw">🧺</div>
-</div>
-
 <script>
+/* ===== INSTRUCTIONS (JS ONLY) ===== */
+const instructions = document.createElement("div");
+instructions.id = "instructions";
+instructions.className = "modal";
+instructions.innerHTML = `
+  <div class="modal-box">
+    <h2>Claw Machine Rules 🎮</h2>
+    <p>
+      Move the basket left and right.<br><br>
+      Click anywhere or press <b>SPACE</b> to drop the claw 🧺⬇️<br><br>
+      Catch 3 surprises to unlock what’s next 💝
+    </p>
+    <button onclick="startGame()">Let’s play 😏</button>
+  </div>
+`;
+document.body.appendChild(instructions);
+
+/* ===== GAME SETUP ===== */
 const game = document.getElementById("game");
 const claw = document.getElementById("claw");
+
+let clawX = window.innerWidth / 2;
+let canDrop = true;
+let caughtCount = 0;
+const maxGifts = 3;
 
 const gifts = {
   "🍳": "One homemade meal by baby 👩‍🍳💕",
   "☕": "Morning coffee in bed privileges for life ☕😌",
   "❤️": "I will flash you anytime you want. No questions asked 😌🔥",
-  "👶": "I will keep your inner child alive forever. No getting mad at jokes ever again 🤪🧸",
-  "😘": "If you kiss me during an argument, it ends there. Promise 😤💋"
+  "👶": "I will keep your inner child alive forever 🤪🧸",
+  "😘": "If you kiss me during an argument, it ends there 😤💋"
 };
 
 const emojis = Object.keys(gifts);
 
-/* MOVE CLAW */
+/* MOVE CLAW LEFT / RIGHT */
 document.addEventListener("mousemove", e => {
-  claw.style.left = e.clientX + "px";
+  clawX = e.clientX;
+  claw.style.left = clawX + "px";
 });
 
-document.addEventListener("touchmove", e => {
-  claw.style.left = e.touches[0].clientX + "px";
+/* DROP CLAW */
+document.addEventListener("click", dropClaw);
+document.addEventListener("keydown", e => {
+  if (e.code === "Space") dropClaw();
 });
 
 /* START GAME */
 function startGame() {
-  document.getElementById("instructions").style.display = "none";
-  setInterval(dropEmoji, 1200);
+  instructions.style.display = "none";
+  spawnEmoji();
 }
 
-/* DROP EMOJIS */
-function dropEmoji() {
+/* SPAWN ONE EMOJI */
+function spawnEmoji() {
+  if (caughtCount >= maxGifts) return;
+
   const emoji = document.createElement("div");
   emoji.className = "emoji";
   emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-  emoji.style.left = Math.random() * 90 + "vw";
-  emoji.style.animationDuration = 4 + Math.random() * 2 + "s";
+  emoji.style.left = Math.random() * 80 + "vw";
+  emoji.style.animationDuration = "6s";
 
   game.appendChild(emoji);
 
-  const checkCatch = setInterval(() => {
-    const eRect = emoji.getBoundingClientRect();
-    const cRect = claw.getBoundingClientRect();
-
-    if (
-      eRect.bottom > cRect.top &&
-      eRect.left < cRect.right &&
-      eRect.right > cRect.left
-    ) {
-      showGift(emoji.textContent);
-      emoji.remove();
-      clearInterval(checkCatch);
-    }
-  }, 40);
-
   emoji.addEventListener("animationend", () => {
     emoji.remove();
-    clearInterval(checkCatch);
+    if (canDrop) spawnEmoji();
   });
+}
+
+/* DROP LOGIC */
+function dropClaw() {
+  if (!canDrop) return;
+  canDrop = false;
+
+  const clawRect = claw.getBoundingClientRect();
+  const emojisOnScreen = document.querySelectorAll(".emoji");
+
+  emojisOnScreen.forEach(emoji => {
+    const eRect = emoji.getBoundingClientRect();
+    if (
+      eRect.left < clawRect.right &&
+      eRect.right > clawRect.left &&
+      eRect.top < clawRect.bottom
+    ) {
+      caughtCount++;
+      showGift(emoji.textContent);
+      emoji.remove();
+    }
+  });
+
+  setTimeout(() => {
+    canDrop = true;
+    spawnEmoji();
+  }, 800);
 }
 
 /* SHOW GIFT */
@@ -227,12 +106,18 @@ function showGift(symbol) {
     <div class="gift-box">
       <h3>${symbol} Gift unlocked 💝</h3>
       <p>${gifts[symbol]}</p>
-      <button onclick="this.closest('.gift-popup').remove()">Continue 😏</button>
+      ${
+        caughtCount >= maxGifts
+          ? `<button onclick="goNext()">That was cute, what next? 😌</button>`
+          : `<button onclick="this.closest('.gift-popup').remove()">Keep playing 🎮</button>`
+      }
     </div>
   `;
   document.body.appendChild(popup);
 }
-</script>
 
-</body>
-</html>
+/* NEXT PAGE */
+function goNext() {
+  window.location.href = "scratch.html";
+}
+</script>
