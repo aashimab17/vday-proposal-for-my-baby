@@ -41,13 +41,6 @@ h2 {
   line-height: 1.6;
 }
 
-.instructions small {
-  display: block;
-  margin-top: 8px;
-  font-size: 0.85rem;
-  opacity: 0.85;
-}
-
 .list {
   display: grid;
   gap: 14px;
@@ -79,13 +72,6 @@ button {
   font-size: 1rem;
   cursor: pointer;
 }
-
-.error {
-  margin-top: 14px;
-  font-size: 0.9rem;
-  color: #7a1f2c;
-  display: none;
-}
 </style>
 </head>
 
@@ -95,9 +81,8 @@ button {
   <h2>Our Bucket List 💗</h2>
 
   <div class="instructions">
-    Fill in all 10 points to proceed after thorough discussion  
-    and approval from your girl.
-    <small>FYI: everything you type here gets saved on the website forever.</small>
+    Let’s write things we want to do together.<br>
+    No pressure. No rules. Just us.
   </div>
 
   <div class="list">
@@ -114,42 +99,15 @@ button {
   </div>
 
   <div class="footer">
-    <button onclick="goNext()">Proceed 💌</button>
-    <div class="error" id="error">
-      All 10 items must be filled. No skipping 😌
-    </div>
+    <button onclick="goNext()">Okay 😌</button>
   </div>
 </div>
 
 <script>
-const inputs = document.querySelectorAll("input");
-const error = document.getElementById("error");
-
-/* LOAD SAVED DATA */
-inputs.forEach((input, index) => {
-  const saved = localStorage.getItem("bucket_" + index);
-  if (saved) input.value = saved;
-
-  input.addEventListener("input", () => {
-    localStorage.setItem("bucket_" + index, input.value);
-  });
-});
-
 function goNext() {
-  let allFilled = true;
-
-  inputs.forEach(input => {
-    if (!input.value.trim()) allFilled = false;
-  });
-
-  if (!allFilled) {
-    error.style.display = "block";
-    return;
-  }
-
   window.location.href = "valentine.html";
 }
 </script>
 
 </body>
-</html
+</html>
