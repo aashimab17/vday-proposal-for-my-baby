@@ -1,225 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Us, in moments ❤️</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Our Little Moments</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      background: #000;
       font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top, #1a1a1a, #000);
+      overflow-x: hidden;
       color: white;
     }
 
-    /* Title */
-    .title {
-      position: absolute;
-      top: 40px;
-      width: 100%;
-      text-align: center;
-      z-index: 10;
-    }
-
-    .title h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      margin-bottom: 6px;
-    }
-
-    .title p {
-      opacity: 0.7;
-    }
-
-    /* Floating gallery */
-    .floating-gallery {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      --speed: 1;
-    }
-
-    .memory {
-      position: absolute;
-      width: 260px;
-      height: 360px;
-      border-radius: 20px;
-      overflow: hidden;
-      animation: floatY calc(22s / var(--speed)) ease-in-out infinite,
-                 driftX calc(40s / var(--speed)) ease-in-out infinite alternate;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.7);
-      transition: filter 0.6s ease, transform 0.6s ease;
-    }
-
-    /* Depth layers */
-    .depth-back {
-      filter: blur(2px) brightness(0.7);
-      transform: scale(0.92);
+    /* ===== BACKGROUND IMAGE COLLAGE ===== */
+    .background {
+      position: fixed;
+      inset: 0;
       z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 35vh;
+      gap: 14px;
+      padding: 24px;
+      animation: slow-pan 70s linear infinite;
     }
 
-    .depth-mid {
-      filter: blur(1px) brightness(0.85);
-      transform: scale(0.97);
-      z-index: 2;
-    }
-
-    .depth-front {
-      filter: blur(0);
-      transform: scale(1);
-      z-index: 3;
-    }
-
-    .memory img {
+    .background img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border-radius: 22px;
+      filter: blur(3px) brightness(0.55);
+      opacity: 0.85;
     }
 
-    /* Caption overlay (hover only) */
+    .background img:nth-child(3n) {
+      filter: blur(5px) brightness(0.45);
+    }
+
+    @keyframes slow-pan {
+      from { transform: translateX(0); }
+      to { transform: translateX(-80px); }
+    }
+
+    /* ===== DARK GRADIENT OVERLAY ===== */
     .overlay {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      padding: 18px;
-      background: rgba(0, 0, 0, 0.55);
-      font-size: 0.95rem;
-      line-height: 1.4;
-      opacity: 0;
-      transform: translateY(15px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(
+        rgba(0,0,0,0.65),
+        rgba(0,0,0,0.85)
+      );
     }
 
-    .overlay span {
-      color: #ff9bb3;
-      font-weight: 500;
+    /* ===== FOREGROUND CONTENT ===== */
+    .content {
+      position: relative;
+      z-index: 3;
+      min-height: 160vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 20px;
     }
 
-    .memory:hover .overlay {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Animations */
-    @keyframes floatY {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-35px); }
-      100% { transform: translateY(0); }
-    }
-
-    @keyframes driftX {
-      from { transform: translateX(-20px); }
-      to   { transform: translateX(20px); }
-    }
-
-    /* Next button */
-    .next {
-      position: absolute;
-      bottom: 40px;
-      width: 100%;
+    .text-box {
+      max-width: 760px;
+      padding: 55px 60px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(14px);
+      border-radius: 32px;
       text-align: center;
-      z-index: 10;
+      box-shadow: 0 40px 90px rgba(0,0,0,0.7);
     }
 
-    .next a {
-      padding: 14px 36px;
-      background: #ff4d6d;
-      color: white;
-      text-decoration: none;
-      border-radius: 30px;
-      font-size: 1rem;
+    .text-box p {
+      font-size: 1.15rem;
+      line-height: 2;
+      opacity: 0.92;
+      margin-bottom: 22px;
     }
 
-    /* Music toggle */
-    .music-toggle {
-      position: absolute;
-      top: 20px;
-      right: 25px;
-      z-index: 10;
+    .caption {
+      margin-top: 28px;
       font-size: 0.9rem;
-      cursor: pointer;
-      opacity: 0.8;
+      color: #ffb6c1;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .text-box:hover .caption {
+      opacity: 1;
+    }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 768px) {
+      .background {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 30vh;
+      }
+
+      .text-box {
+        padding: 40px 32px;
+      }
+
+      .text-box p {
+        font-size: 1.05rem;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="title">
-    <h1>Us, in moments ❤️</h1>
-    <p>Some memories don’t fade. They float.</p>
+  <!-- BACKGROUND IMAGES -->
+  <div class="background">
+    <img src="assets/images/photo1.jpg">
+    <img src="assets/images/photo2.jpg">
+    <img src="assets/images/photo3.jpg">
+    <img src="assets/images/photo4.jpg">
+    <img src="assets/images/photo5.jpg">
+    <img src="assets/images/photo6.jpg">
+    <img src="assets/images/photo7.jpg">
+    <img src="assets/images/photo8.jpg">
+    <img src="assets/images/photo9.jpg">
+    <img src="assets/images/photo10.jpg">
+    <img src="assets/images/photo11.jpg">
+    <img src="assets/images/photo12.jpg">
   </div>
 
-  <div class="music-toggle" onclick="toggleMusic()">♫ music</div>
+  <!-- OVERLAY -->
+  <div class="overlay"></div>
 
-  <audio id="bg-music" loop>
-    <source src="assets/music/song.mp3" type="audio/mpeg">
-  </audio>
+  <!-- FOREGROUND TEXT -->
+  <div class="content">
+    <div class="text-box">
+      <p>
+        I never really thought of myself as someone who deserved a happy ever after 🫶  
+        Love always felt like something that happened to other people, not me.
+      </p>
 
-  <div class="floating-gallery" id="gallery">
+      <p>
+        But somehow, you made me believe again ✨  
+        You made love feel real and possible, like it could actually happen for me too 💖
+      </p>
 
-    <div class="memory depth-back" style="top: 18%; left: 6%;">
-      <img src="assets/images/photo1.jpg">
-      <div class="overlay">This still feels like <span>magic</span>.</div>
+      <p>
+        You make me a better person without even trying.  
+        You make me feel seen, safe, and loved in ways I never expected 🤍
+      </p>
+
+      <p>
+        And yes, you can be absolutely crazy, a little unhinged, and sometimes very stupid 🙄😂  
+        But somehow, that just makes me love you even more 🥺💕
+      </p>
+
+      <div class="caption">
+        Some things feel better when they’re discovered slowly 💗
+      </div>
     </div>
-
-    <div class="memory depth-mid" style="top: 55%; left: 12%;">
-      <img src="assets/images/photo2.jpg">
-      <div class="overlay">Somehow, you make everything <span>better</span>.</div>
-    </div>
-
-    <div class="memory depth-front" style="top: 25%; left: 35%;">
-      <img src="assets/images/photo3.jpg">
-      <div class="overlay">One of my <span>favourite</span> versions of us.</div>
-    </div>
-
-    <div class="memory depth-mid" style="top: 60%; left: 40%;">
-      <img src="assets/images/photo4.jpg">
-      <div class="overlay">Still smiling when I think about this.</div>
-    </div>
-
-    <div class="memory depth-front" style="top: 20%; left: 62%;">
-      <img src="assets/images/photo5.jpg">
-      <div class="overlay">You felt like <span>home</span> here.</div>
-    </div>
-
-    <div class="memory depth-back" style="top: 52%; left: 68%;">
-      <img src="assets/images/photo6.jpg">
-      <div class="overlay">One of those moments I never want to forget.</div>
-    </div>
-
   </div>
-
-  <div class="next">
-    <a href="games.html">Let’s play something 💕</a>
-  </div>
-
-  <script>
-    const music = document.getElementById("bg-music");
-    const gallery = document.getElementById("gallery");
-    let playing = false;
-
-    function toggleMusic() {
-      if (!playing) {
-        music.play();
-        playing = true;
-      } else {
-        music.pause();
-        playing = false;
-      }
-    }
-
-    // Sync animation speed subtly to music progress
-    music.addEventListener("timeupdate", () => {
-      const speed = 0.8 + (music.currentTime % 5) / 10;
-      gallery.style.setProperty("--speed", speed);
-    });
-  </script>
 
 </body>
 </html>
