@@ -1,1 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arcade of Us</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1a1a1a, #000);
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    /* ===== INSTRUCTION MODAL ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .modal-box {
+      max-width: 520px;
+      background: rgba(20,20,20,0.9);
+      padding: 40px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    }
+
+    .modal-box h1 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    .modal-box p {
+      font-size: 1rem;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    .start-btn {
+      margin-top: 30px;
+      padding: 14px 36px;
+      border: none;
+      border-radius: 30px;
+      background: #ff4d6d;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* ===== GAME AREA ===== */
+    .game {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 3rem;
+      cursor: pointer;
+      animation: float 12s linear infinite;
+      user-select: none;
+    }
+
+    @keyframes float {
+      from { transform: translateY(110vh); }
+      to { transform: translateY(-20vh); }
+    }
+
+    /* ===== REWARD POPUP ===== */
+    .reward {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9;
+    }
+
+    .reward-box {
+      background: rgba(30,30,30,0.95);
+      padding: 40px;
+      border-radius: 24px;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    .reward-box h2 {
+      margin-bottom: 16px;
+    }
+
+    .reward-box p {
+      line-height: 1.7;
+    }
+
+    .close-btn {
+      margin-top: 24px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      background: #ff4d6d;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- INSTRUCTIONS -->
+<div class="modal" id="instructions">
+  <div class="modal-box">
+    <h1>🎮 Arcade of Us</h1>
+    <p>
+      Welcome to the claw machine you never knew you needed.<br><br>
+      Emojis will float around the screen.<br>
+      Catch them by clicking.<br><br>
+      Every emoji unlocks a gift.<br>
+      Some are cute. Some are dangerous 😌
+    </p>
+    <button class="start-btn" onclick="startGame()">I get it 💕</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="game" id="game"></div>
+
+<!-- REWARD -->
+<div class="reward" id="reward">
+  <div class="reward-box">
+    <h2 id="rewardTitle"></h2>
+    <p id="rewardText"></p>
+    <button class="close-btn" onclick="closeReward()">Okay 😳</button>
+  </div>
+</div>
+
+<script>
+  const emojis = [
+    { icon: "🍳", title: "Cooking Emoji", text: "One home made meal by baby 🍽️💗" },
+    { icon: "☕", title: "Coffee Emoji", text: "Morning coffee in bed privileges for life ☕🛏️" },
+    { icon: "❤️", title: "Heart Emoji", text: "I will flash you anytime you want without question 😌🔥" },
+    { icon: "👶", title: "Baby Emoji", text: "I will keep your inner child alive. No getting mad at jokes ever again 🤍" },
+    { icon: "💋", title: "Kiss Emoji", text: "If you kiss me during an argument, it ends there. Promise 💋" }
+  ];
+
+  const game = document.getElementById("game");
+  const reward = document.getElementById("reward");
+  const rewardTitle = document.getElementById("rewardTitle");
+  const rewardText = document.getElementById("rewardText");
+
+  function startGame() {
+    document.getElementById("instructions").style.display = "none";
+    emojis.forEach(spawnEmoji);
+  }
+
+  function spawnEmoji(item) {
+    const el = document.createElement("div");
+    el.className = "emoji";
+    el.innerText = item.icon;
+    el.style.left = Math.random() * 80 + "vw";
+    el.style.animationDuration = 8 + Math.random() * 6 + "s";
+
+    el.onclick = () => {
+      el.remove();
+      rewardTitle.innerText = item.title;
+      rewardText.innerText = item.text;
+      reward.style.display = "flex";
+    };
+
+    game.appendChild(el);
+  }
+
+  function closeReward() {
+    reward.style.display = "none";
+  }
+</script>
+
+</body>
+</html>
