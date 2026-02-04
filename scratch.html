@@ -1,1 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Our Bucket List 💗</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ffd1dc, #ffb6c1);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a1f2c;
+}
+
+.container {
+  width: 92%;
+  max-width: 620px;
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.instructions {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.instructions small {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.list {
+  display: grid;
+  gap: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: none;
+  font-size: 1rem;
+}
+
+input::placeholder {
+  color: #8a5a6a;
+}
+
+.footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+button {
+  padding: 12px 36px;
+  border: none;
+  border-radius: 30px;
+  background: #ff4d6d;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.error {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: #7a1f2c;
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Our Bucket List 💗</h2>
+
+  <div class="instructions">
+    Fill in all 10 points to proceed after thorough discussion  
+    and approval from your girl.
+    <small>FYI: everything you type here gets saved on the website forever.</small>
+  </div>
+
+  <div class="list">
+    <input placeholder="1." />
+    <input placeholder="2." />
+    <input placeholder="3." />
+    <input placeholder="4." />
+    <input placeholder="5." />
+    <input placeholder="6." />
+    <input placeholder="7." />
+    <input placeholder="8." />
+    <input placeholder="9." />
+    <input placeholder="10." />
+  </div>
+
+  <div class="footer">
+    <button onclick="goNext()">Proceed 💌</button>
+    <div class="error" id="error">
+      All 10 items must be filled. No skipping 😌
+    </div>
+  </div>
+</div>
+
+<script>
+const inputs = document.querySelectorAll("input");
+const error = document.getElementById("error");
+
+/* LOAD SAVED DATA */
+inputs.forEach((input, index) => {
+  const saved = localStorage.getItem("bucket_" + index);
+  if (saved) input.value = saved;
+
+  input.addEventListener("input", () => {
+    localStorage.setItem("bucket_" + index, input.value);
+  });
+});
+
+function goNext() {
+  let allFilled = true;
+
+  inputs.forEach(input => {
+    if (!input.value.trim()) allFilled = false;
+  });
+
+  if (!allFilled) {
+    error.style.display = "block";
+    return;
+  }
+
+  window.location.href = "valentine.html";
+}
+</script>
+
+</body>
+</html>
