@@ -1,1 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For You ❤️</title>
 
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #fff1f6, #ffd6e8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 700px;
+      padding: 50px 40px;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      box-shadow: 0 20px 60px rgba(255, 77, 109, 0.25);
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 1.5s ease;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #2b2b2b;
+    }
+
+    .typing {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      min-height: 70px;
+      color: #444;
+      margin-bottom: 35px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 16px 38px;
+      background: linear-gradient(135deg, #ff4d6d, #ff758f);
+      color: white;
+      text-decoration: none;
+      border-radius: 40px;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(255, 77, 109, 0.5);
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #ff4d6d;
+      transform: rotate(45deg);
+      animation: float 8s infinite ease-in;
+      opacity: 0.6;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #ff4d6d;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -9px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -9px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Floating hearts -->
+  <div class="heart" style="left: 10%; animation-delay: 0s;"></div>
+  <div class="heart" style="left: 30%; animation-delay: 2s;"></div>
+  <div class="heart" style="left: 55%; animation-delay: 4s;"></div>
+  <div class="heart" style="left: 75%; animation-delay: 1s;"></div>
+  <div class="heart" style="left: 90%; animation-delay: 3s;"></div>
+
+  <div class="container">
+    <h1>Hey love ❤️</h1>
+    <div class="typing" id="typing"></div>
+
+    <a href="gallery.html" class="button">Begin our little story 💕</a>
+  </div>
+
+  <script>
+    const text = "I wanted to do something a little different.\nSomething slow, soft, and just ours.\nSo take a deep breath…\nAnd let me show you why you mean the world to me.";
+    const typingElement = document.getElementById("typing");
+    let index = 0;
+
+    function typeText() {
+      if (index < text.length) {
+        typingElement.innerHTML += text.charAt(index) === "\n" ? "<br>" : text.charAt(index);
+        index++;
+        setTimeout(typeText, 45);
+      }
+    }
+
+    typeText();
+  </script>
+
+</body>
+</html>
