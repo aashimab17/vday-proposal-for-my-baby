@@ -32,10 +32,10 @@ body {
 .modal-box {
   max-width: 420px;
   padding: 36px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.06);
   border-radius: 24px;
   text-align: center;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   box-shadow: 0 30px 80px rgba(0,0,0,0.6);
 }
 
@@ -68,7 +68,7 @@ body {
   overflow: hidden;
 }
 
-/* ===== CLAW / BASKET ===== */
+/* ===== CLAW ===== */
 .claw {
   position: absolute;
   bottom: 20px;
@@ -114,7 +114,7 @@ body {
 }
 
 @keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(0.85); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
@@ -146,7 +146,7 @@ body {
   <div class="modal-box">
     <h2>How this works 🎮</h2>
     <p>
-      Move the claw to catch falling emojis.<br><br>
+      Move the basket to catch falling emojis.<br><br>
       Every emoji unlocks a gift just for you 💝<br>
       Catch as many as you want.
     </p>
@@ -160,74 +160,74 @@ body {
 </div>
 
 <script>
-const game = document.getElementById('game');
-const claw = document.getElementById('claw');
+const game = document.getElementById("game");
+const claw = document.getElementById("claw");
 
 const gifts = {
   "🍳": "One homemade meal by baby 👩‍🍳💕",
   "☕": "Morning coffee in bed privileges for life ☕😌",
   "❤️": "I will flash you anytime you want. No questions asked 😌🔥",
-  "👶": "I will protect your inner child forever. No getting mad at jokes ever again 🤪🧸",
+  "👶": "I will keep your inner child alive forever. No getting mad at jokes ever again 🤪🧸",
   "😘": "If you kiss me during an argument, it ends there. Promise 😤💋"
 };
 
 const emojis = Object.keys(gifts);
 
-/* ===== MOVE CLAW ===== */
-document.addEventListener('mousemove', e => {
-  claw.style.left = e.clientX + 'px';
+/* MOVE CLAW */
+document.addEventListener("mousemove", e => {
+  claw.style.left = e.clientX + "px";
 });
 
-document.addEventListener('touchmove', e => {
-  claw.style.left = e.touches[0].clientX + 'px';
+document.addEventListener("touchmove", e => {
+  claw.style.left = e.touches[0].clientX + "px";
 });
 
-/* ===== START GAME ===== */
+/* START GAME */
 function startGame() {
-  document.getElementById('instructions').style.display = 'none';
+  document.getElementById("instructions").style.display = "none";
   setInterval(dropEmoji, 1200);
 }
 
-/* ===== DROP EMOJI ===== */
+/* DROP EMOJIS */
 function dropEmoji() {
-  const emoji = document.createElement('div');
-  emoji.classList.add('emoji');
+  const emoji = document.createElement("div");
+  emoji.className = "emoji";
   emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-  emoji.style.left = Math.random() * 90 + 'vw';
-  emoji.style.animationDuration = 4 + Math.random() * 2 + 's';
+  emoji.style.left = Math.random() * 90 + "vw";
+  emoji.style.animationDuration = 4 + Math.random() * 2 + "s";
 
   game.appendChild(emoji);
 
-  const fallInterval = setInterval(() => {
-    const emojiRect = emoji.getBoundingClientRect();
-    const clawRect = claw.getBoundingClientRect();
+  const checkCatch = setInterval(() => {
+    const eRect = emoji.getBoundingClientRect();
+    const cRect = claw.getBoundingClientRect();
 
     if (
-      emojiRect.bottom > clawRect.top &&
-      emojiRect.left < clawRect.right &&
-      emojiRect.right > clawRect.left
+      eRect.bottom > cRect.top &&
+      eRect.left < cRect.right &&
+      eRect.right > cRect.left
     ) {
       showGift(emoji.textContent);
       emoji.remove();
-      clearInterval(fallInterval);
+      clearInterval(checkCatch);
     }
-  }, 50);
+  }, 40);
 
-  emoji.addEventListener('animationend', () => {
+  emoji.addEventListener("animationend", () => {
     emoji.remove();
-    clearInterval(fallInterval);
+    clearInterval(checkCatch);
   });
 }
 
-/* ===== SHOW GIFT ===== */
+/* SHOW GIFT */
 function showGift(symbol) {
-  const popup = document.createElement('div');
-  popup.className = 'gift-popup';
+  const popup = document.createElement("div");
+  popup.className = "gift-popup";
   popup.innerHTML = `
     <div class="gift-box">
-      <h3>${symbol} You unlocked a gift 💝</h3>
+      <h3>${symbol} Gift unlocked 💝</h3>
       <p>${gifts[symbol]}</p>
-      <button onclick="this.parentElement.parentElement.remove()">Continue 😏</button>
+      <button onclick="this.closest('.gift-popup').remove()">Continue 😏</button>
     </div>
   `;
   document.body.appendChild(popup);
