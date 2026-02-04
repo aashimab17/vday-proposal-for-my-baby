@@ -36,13 +36,9 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-h2 {
-  margin-bottom: 18px;
-}
+h2 { margin-bottom: 18px; }
 
-p {
-  line-height: 1.6;
-}
+p { line-height: 1.6; }
 
 button {
   margin-top: 26px;
@@ -71,7 +67,7 @@ button {
 
 .feedback {
   margin-top: 14px;
-  min-height: 24px;
+  min-height: 26px;
   font-size: 0.95rem;
 }
 </style>
@@ -79,6 +75,7 @@ button {
 
 <body>
 
+<!-- INTRO -->
 <div class="card" id="intro">
   <h2>Hey you. Yes, you. 🫵💗</h2>
   <p>
@@ -96,6 +93,7 @@ button {
   <button onclick="startQuiz()">Are you ready? 😏💌</button>
 </div>
 
+<!-- QUIZ -->
 <div class="card" id="quiz" style="display:none;">
   <div id="question"></div>
   <div id="options"></div>
@@ -104,62 +102,73 @@ button {
 
 <script>
 const questions = [
-{
-q: "1. What was my first thought when I realized I liked you? 💭💗",
-options: [
-"ABBE YAAARRR",
-"Ye toh hona hi tha",
-"I would be one lucky bitch if he likes me back",
-"All of the above"
-],
-correct: 3
-},
-{
-q: "2. What’s my favorite thing about you when no one else is around? 😌",
-options: [
-"The way you can laugh about anything",
-"The fact that you turn into my little needy baby",
-"How safe you make me feel",
-"Your annoying voices and random accent switches"
-],
-correct: 1
-},
-{
-q: "3. What do I get mad at you for but secretly find cute? 😤💗",
-options: [
-"Random annoying bullshit (spit bubbles, accents, ruining songs)",
-"Secretly having me on FaceTime while others are around",
-"When you talk about separate rooms",
-"All of the above"
-],
-correct: 3
-},
-{
-q: "4. What do I want more of with you? 🥹",
-options: ["Time","Memories","Laughing till it hurts","A future"],
-correct: 3
-},
-{
-q: "5. When I say “I’m fine,” what do I actually want? 😌",
-options: ["Attention","A hug","Reassurance","All of the above"],
-correct: 3,
-extra: "Fir dediya karo naaa! 😤💗"
-},
-{
-q: "So… what am I really asking you? 💌",
-options: [
-"To be patient with me",
-"To keep choosing me",
-"To be my Valentine",
-"All of the above"
-],
-correct: 3,
-final: true
-}
+  {
+    q: "1. What was my first thought when I realized I liked you? 💭💗",
+    options: [
+      "ABBE YAAARRR",
+      "Ye toh hona hi tha",
+      "I would be one lucky bitch if he likes me back",
+      "All of the above"
+    ],
+    correct: 3
+  },
+  {
+    q: "2. What’s my favorite thing about you when no one else is around? 😌",
+    options: [
+      "The way you can laugh about anything",
+      "The fact that you turn into my little needy baby",
+      "How safe you make me feel",
+      "Your annoying voices and random accent switches"
+    ],
+    correct: 1
+  },
+  {
+    q: "3. What do I get mad at you for but secretly find cute? 😤💗",
+    options: [
+      "Random annoying bullshit (spit bubbles, accents, ruining songs)",
+      "Secretly having me on FaceTime while others are around",
+      "When you talk about separate rooms",
+      "All of the above"
+    ],
+    correct: 3
+  },
+  {
+    q: "4. What do I want more of with you? 🥹",
+    options: [
+      "Time",
+      "Memories",
+      "Laughing till it hurts",
+      "A future"
+    ],
+    correct: 3
+  },
+  {
+    q: "5. When I say “I’m fine,” what do I actually want? 😌",
+    options: [
+      "Attention",
+      "A hug",
+      "Reassurance",
+      "All of the above"
+    ],
+    correct: 3,
+    extra: "Fir dediya karo naaa! 😤💗"
+  },
+  {
+    q: "So… what am I really asking you? 💌",
+    options: [
+      "To be patient with me",
+      "To keep choosing me",
+      "To be my Valentine",
+      "All of the above"
+    ],
+    correct: 3,
+    final: true
+  }
 ];
 
-let index = 0;
-let tries = 0;
+let current = 0;
+let attempts = 0;
+let locked = false;
 
 function startQuiz() {
   document.getElementById("intro").style.display = "none";
@@ -168,47 +177,57 @@ function startQuiz() {
 }
 
 function loadQuestion() {
-  tries = 0;
-  document.getElementById("question").innerHTML = `<h2>${questions[index].q}</h2>`;
-  const opts = document.getElementById("options");
-  opts.innerHTML = "";
+  attempts = 0;
+  locked = false;
+
+  const q = questions[current];
+  document.getElementById("question").innerHTML = `<h2>${q.q}</h2>`;
   document.getElementById("feedback").textContent = "";
 
-  questions[index].options.forEach((opt, i) => {
+  const optionsDiv = document.getElementById("options");
+  optionsDiv.innerHTML = "";
+
+  q.options.forEach((text, i) => {
     const div = document.createElement("div");
     div.className = "option";
-    div.textContent = opt;
+    div.textContent = text;
     div.onclick = () => selectAnswer(div, i);
-    opts.appendChild(div);
+    optionsDiv.appendChild(div);
   });
 }
 
 function selectAnswer(el, i) {
-  const q = questions[index];
+  if (locked) return;
+
+  const q = questions[current];
   const feedback = document.getElementById("feedback");
 
   if (i === q.correct) {
+    locked = true;
     el.classList.add("correct");
     feedback.textContent = q.extra || "Correct 😌💗";
 
     setTimeout(() => {
       if (q.final) {
-        window.location.href = "/vday-proposal-for-my-baby/vday.html";
+        window.location.href = "vday.html";
       } else {
-        index++;
+        current++;
         loadQuestion();
       }
     }, 1200);
+
   } else {
     el.classList.add("wrong");
-    tries++;
+    attempts++;
 
-    if (tries === 1) {
+    if (attempts === 1) {
       feedback.textContent = "Nope. Try again 😐";
     } else {
+      locked = true;
       feedback.textContent = `Correct answer: ${q.options[q.correct]} 😌`;
+
       setTimeout(() => {
-        index++;
+        current++;
         loadQuestion();
       }, 1400);
     }
