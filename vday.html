@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>So… 💗</title>
+<title>My Valentine 💗</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -21,8 +21,8 @@ body {
 }
 
 .card {
-  background: rgba(255,255,255,0.45);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(14px);
   padding: 50px;
   border-radius: 32px;
   text-align: center;
@@ -49,7 +49,7 @@ p {
 
 .buttons {
   position: relative;
-  height: 80px;
+  height: 90px;
 }
 
 button {
@@ -79,7 +79,7 @@ button {
 }
 
 @keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
+  from { transform: scale(0.85); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 </style>
@@ -87,10 +87,11 @@ button {
 
 <body>
 
-<div class="card" id="card">
+<div class="card">
   <h1>So… 💕</h1>
+
   <p id="question">
-    Will you be my Valentine? 💌  
+    Will you be my Valentine? 💌<br>
     Like… officially. Properly. With feelings.
   </p>
 
@@ -128,8 +129,8 @@ const texts = [
 function moveNo() {
   noCount++;
 
-  const x = Math.random() * 240 - 120;
-  const y = Math.random() * 120 - 60;
+  const x = Math.random() * 260 - 130;
+  const y = Math.random() * 140 - 70;
 
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
 
