@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Last Activity 💗</title>
+<title>One Last Thing 💗</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -20,24 +20,33 @@ body {
 }
 
 .card {
-  width: 90%;
-  max-width: 650px;
+  width: 92%;
+  max-width: 620px;
   background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(12px);
   padding: 40px;
-  border-radius: 32px;
+  border-radius: 30px;
   text-align: center;
   box-shadow: 0 40px 90px rgba(0,0,0,0.25);
   animation: fadeIn 0.6s ease;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+h2 {
+  margin-bottom: 18px;
+}
+
+p {
+  line-height: 1.6;
+}
+
 button {
-  padding: 14px 36px;
+  margin-top: 26px;
+  padding: 12px 36px;
   border: none;
   border-radius: 30px;
   background: #ff4d6d;
@@ -61,7 +70,7 @@ button {
 .wrong { background: #ffd6d6; }
 
 .feedback {
-  margin-top: 16px;
+  margin-top: 14px;
   min-height: 24px;
   font-size: 0.95rem;
 }
@@ -70,95 +79,79 @@ button {
 
 <body>
 
-<div class="card" id="screen">
+<div class="card" id="intro">
+  <h2>Hey you. Yes, you. 🫵💗</h2>
+  <p>
+    Listen.<br>
+    This is <b>not optional</b>.
+    <br><br>
+    This is a <b>QUIZ</b>.<br>
+    About us.<br>
+    About me.<br>
+    About you surviving being my boyfriend 😌
+    <br><br>
+    It’s the <b>last activity</b>.<br>
+    Pakka. Promise.
+  </p>
+  <button onclick="startQuiz()">Are you ready? 😏💌</button>
+</div>
 
-  <!-- INTRO SCREEN -->
-  <div id="intro">
-    <p><strong>Hey you. Yes, you. 🫵💗</strong></p>
-    <p>Listen.<br>This is <strong>not optional</strong>.</p>
-    <p>
-      This is a <strong>QUIZ</strong>.<br>
-      About us.<br>
-      About me.<br>
-      About you surviving being my boyfriend 😌
-    </p>
-    <p>
-      It’s the <strong>last activity</strong>.<br>
-      Pakka.<br>
-      Promise.
-    </p>
-    <button onclick="startQuiz()">I’m ready 😌💌</button>
-  </div>
-
-  <!-- QUIZ SCREEN -->
-  <div id="quiz" style="display:none;">
-    <h2 id="question"></h2>
-    <div id="options"></div>
-    <div class="feedback" id="feedback"></div>
-  </div>
-
+<div class="card" id="quiz" style="display:none;">
+  <div id="question"></div>
+  <div id="options"></div>
+  <div class="feedback" id="feedback"></div>
 </div>
 
 <script>
 const questions = [
 {
-q: "What was my first thought when I realized I liked you? 😳💗",
+q: "1. What was my first thought when I realized I liked you? 💭💗",
 options: [
-"ABBE YAAARRR 😤",
-"Ye toh hona hi tha 😌",
-"I would be one lucky bitch if he likes me back 🥹",
-"All of the above 😏"
+"ABBE YAAARRR",
+"Ye toh hona hi tha",
+"I would be one lucky bitch if he likes me back",
+"All of the above"
 ],
 correct: 3
 },
 {
-q: "What’s my favorite thing about you when no one else is around? 🥺💞",
+q: "2. What’s my favorite thing about you when no one else is around? 😌",
 options: [
-"The way you can laugh about anything 😄",
-"The fact that you turn into my little needy baby 🫶",
-"How safe you make me feel 🤍",
-"Your annoying voices and random accents 🤪"
+"The way you can laugh about anything",
+"The fact that you turn into my little needy baby",
+"How safe you make me feel",
+"Your annoying voices and random accent switches"
 ],
 correct: 1
 },
 {
-q: "What do I get mad at you for but secretly find cute? 😤💗",
+q: "3. What do I get mad at you for but secretly find cute? 😤💗",
 options: [
-"Random annoying bullshit 🎶🤡",
-"Secretly having me on FaceTime 📱",
-"When you talk about separate rooms 😒",
-"All of the above 😌"
+"Random annoying bullshit (spit bubbles, accents, ruining songs)",
+"Secretly having me on FaceTime while others are around",
+"When you talk about separate rooms",
+"All of the above"
 ],
 correct: 3
 },
 {
-q: "What do I want more of with you? 💭💘",
-options: [
-"Time ⏳",
-"Memories 📸",
-"Laughing till it hurts 😂",
-"A future 🥹💍"
-],
+q: "4. What do I want more of with you? 🥹",
+options: ["Time","Memories","Laughing till it hurts","A future"],
 correct: 3
 },
 {
-q: "When I say “I’m fine,” what do I actually want? 😌",
-options: [
-"Attention 👀",
-"A hug 🤗",
-"Reassurance 💞",
-"All of the above 😌"
-],
+q: "5. When I say “I’m fine,” what do I actually want? 😌",
+options: ["Attention","A hug","Reassurance","All of the above"],
 correct: 3,
 extra: "Fir dediya karo naaa! 😤💗"
 },
 {
-q: "So… what am I really asking you? 😏💌",
+q: "So… what am I really asking you? 💌",
 options: [
-"To be patient with me 🤍",
-"To keep choosing me 🫶",
-"To be my Valentine 💘",
-"All of the above 😌"
+"To be patient with me",
+"To keep choosing me",
+"To be my Valentine",
+"All of the above"
 ],
 correct: 3,
 final: true
@@ -176,10 +169,10 @@ function startQuiz() {
 
 function loadQuestion() {
   tries = 0;
-  document.getElementById("question").textContent = questions[index].q;
-  document.getElementById("feedback").textContent = "";
+  document.getElementById("question").innerHTML = `<h2>${questions[index].q}</h2>`;
   const opts = document.getElementById("options");
   opts.innerHTML = "";
+  document.getElementById("feedback").textContent = "";
 
   questions[index].options.forEach((opt, i) => {
     const div = document.createElement("div");
@@ -191,31 +184,29 @@ function loadQuestion() {
 }
 
 function selectAnswer(el, i) {
-  const correct = questions[index].correct;
+  const q = questions[index];
   const feedback = document.getElementById("feedback");
 
-  if (i === correct) {
+  if (i === q.correct) {
     el.classList.add("correct");
-    feedback.textContent = questions[index].extra || "Correct 😌💗";
+    feedback.textContent = q.extra || "Correct 😌💗";
 
     setTimeout(() => {
-      if (questions[index].final) {
-        window.location.href = "valentine.html";
+      if (q.final) {
+        window.location.href = "/vday-proposal-for-my-baby/vday.html";
       } else {
         index++;
         loadQuestion();
       }
     }, 1200);
-
   } else {
-    tries++;
     el.classList.add("wrong");
+    tries++;
 
     if (tries === 1) {
-      feedback.textContent = "Hmm… think again 😐";
+      feedback.textContent = "Nope. Try again 😐";
     } else {
-      feedback.textContent =
-        "Correct answer: " + questions[index].options[correct] + " 😌💗";
+      feedback.textContent = `Correct answer: ${q.options[q.correct]} 😌`;
       setTimeout(() => {
         index++;
         loadQuestion();
