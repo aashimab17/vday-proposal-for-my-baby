@@ -1,99 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>For You 💗</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  height: 100vh;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #ffb6c1, #ffd1dc);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4a1f2c;
-}
-
-.card {
-  width: 90%;
-  max-width: 600px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(12px);
-  padding: 40px;
-  border-radius: 30px;
-  text-align: center;
-  box-shadow: 0 40px 90px rgba(0,0,0,0.25);
-}
-
-#scratchArea {
-  position: relative;
-  width: 100%;
-  height: 120px;
-  background: #ff4d6d;
-  border-radius: 20px;
-  margin-bottom: 28px;
-  overflow: hidden;
-}
-
-#scratchText {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.1rem;
-  pointer-events: none;
-}
-
-canvas {
-  position: absolute;
-  inset: 0;
-}
-
-.option {
-  background: white;
-  padding: 14px;
-  border-radius: 16px;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.option:hover { transform: scale(1.02); }
-.correct { background: #c1f0d6; }
-.wrong { background: #ffd6d6; }
-
-.feedback {
-  margin-top: 16px;
-  min-height: 24px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="card">
-  <h2 id="title">Scratch to reveal 💗</h2>
-
-  <div id="scratchArea">
-    <div id="scratchText">Scratch here 😌</div>
-    <canvas id="canvas"></canvas>
-  </div>
-
-  <div id="question" style="display:none;"></div>
-  <div id="options"></div>
-  <div class="feedback" id="feedback"></div>
-</div>
-
 <script>
 const questions = [
-{
-q: "What was my first thought when I realized I liked you?",
-options: ["ABBE YAAARRR","Ye toh hona hi tha","I would be one lucky bitch if he likes me back","All of the above"],
-correct: 3
+  {
+    q: "What was my first thought when I realized I liked you?",
+    options: [
+      "ABBE YAAARRR",
+      "Ye toh hona hi tha",
+      "I would be one lucky bitch if he likes me back",
+      "All of the above"
+    ],
+    correct: 3
+  }
+];
+
+let index = 0;
+let tries = 0;
+
+/* ELEMENTS */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const scratchArea = document.getElementById("scratchArea");
+const questionDiv = document.getElementById("question");
+const optionsDiv = document.getElementById("options");
+const feedback = document.getElementById("feedback");
+
+/* CANVAS SETUP */
+function setupCanvas() {
+  canvas.width = scratchArea.offsetWidth;
+  canvas.height = scratchArea.offsetHeight;
+
+  ctx.globalCompositeOperation = "source-over";
+  ctx.fillStyle = "#ff4d6d";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+setupCanvas();
+
+/* SCRATCH LOGIC */
+let scratching = false;
+
+function scratch(x, y) {
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.beginPath();
+  ctx.arc(x, y, 22, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+/* MOUSE */
+canvas.addEventListener("mousedown", () => scratching = true);
+canvas.addEventListener("mouseup", () => scratching = false);
+canvas.addEventListener("mouseleave", () => scratching = false);
+canvas.addEventListener("mousemove", e => {
+  if (!scratching) return;
+  scratch(e.offsetX, e.offsetY);
+});
+
+/* TOUCH */
+canvas.addEventListener("touchstart", () => scratching = true);
+canvas.addEventListener("touchend", () => scratching = false);
+canvas.addEventListener("touchmove", e => {
+  if (!scratching) return;
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches[0];
+  scratch(touch.clientX - rect.left, touch.clientY - rect.top);
+  e.preventDefault();
+});
+
+/* REVEAL QUESTION AFTER SCRATCH */
+setTimeout(revealQuestion, 1500);
+
+function revealQuestion() {
+  canvas.style.display = "none";
+  document.getElementById("scratchText").style.display = "none";
+  questionDiv.style.display = "block";
+  loadQuestion();
+}
+
+/* LOAD QUESTION */
+function loadQuestion() {
+  const q = questions[index];
+  questionDiv.innerHTML = `<h2>${q.q}</h2>`;
+  optionsDiv.innerHTML = "";
+  feedback.textContent = "";
+
+  q.options.forEach((opt, i) => {
+    const div = document.createElement("div");
+    div.className = "option";
+    div.textContent = opt;
+    div.onclick = () => selectAnswer(div, i);
+    optionsDiv.appendChild(div);
+  });
+}
+
+/* ANSWER HANDLING */
+function selectAnswer(el, i) {
+  const correct = questions[index].correct;
+
+  if (i === correct) {
+    el.classList.add("correct");
+    feedback.textContent = "Correct 😌💗";
+  } else {
+    tries++;
+    el.classList.add("wrong");
+
+    if (tries === 1) {
+      feedback.textContent = "Hmm… try again 😐";
+    } else {
+      feedback.textContent =
+        `Correct answer: ${questions[index].options[correct]} 😌`;
+    }
+  }
+}
+</script>
