@@ -259,8 +259,12 @@ function showGift(text) {
       <p>${text}</p>
       ${
         collected === 5
-          ? `<button onclick="location.href='bucket.html'">That was cute, what next? 😌</button>`
-          : `<button onclick="this.closest('.popup').remove(); resetClaw(); spawnPrize();">Keep playing 🎮</button>`
+          ? `<button onclick="location.href='/vday-proposal-for-my-baby/bucket.html'">
+              That was cute, what next? 😌
+            </button>`
+          : `<button onclick="this.closest('.popup').remove(); resetClaw(); spawnPrize();">
+              Keep playing 🎮
+            </button>`
       }
     </div>
   `;
