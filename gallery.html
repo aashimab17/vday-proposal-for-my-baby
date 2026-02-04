@@ -37,12 +37,12 @@
       height: 100%;
       object-fit: cover;
       border-radius: 22px;
-      filter: blur(1.5px) brightness(0.85);
-      opacity: 0.95;
+      filter: blur(1.2px) brightness(0.95);
+      opacity: 1;
     }
 
     .background img:nth-child(3n) {
-      filter: blur(2.5px) brightness(0.8);
+      filter: blur(2px) brightness(0.9);
     }
 
     @keyframes slow-pan {
@@ -50,14 +50,14 @@
       to { transform: translateX(-60px); }
     }
 
-    /* ===== LIGHTER OVERLAY ===== */
+    /* ===== LIGHT OVERLAY ===== */
     .overlay {
       position: fixed;
       inset: 0;
       z-index: 2;
       background: linear-gradient(
-        rgba(0,0,0,0.3),
-        rgba(0,0,0,0.45)
+        rgba(0,0,0,0.25),
+        rgba(0,0,0,0.35)
       );
     }
 
@@ -75,11 +75,11 @@
     .text-box {
       max-width: 760px;
       padding: 55px 60px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(10px);
       border-radius: 32px;
       text-align: center;
-      box-shadow: 0 40px 90px rgba(0,0,0,0.5);
+      box-shadow: 0 40px 90px rgba(0,0,0,0.45);
     }
 
     .text-box p {
@@ -99,6 +99,25 @@
 
     .text-box:hover .caption {
       opacity: 1;
+    }
+
+    /* ===== NEXT BUTTON ===== */
+    .next-btn {
+      display: inline-block;
+      margin-top: 36px;
+      padding: 14px 38px;
+      background: #ff4d6d;
+      color: white;
+      text-decoration: none;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 77, 109, 0.45);
     }
 
     /* ===== MOBILE ===== */
@@ -143,6 +162,7 @@
   <!-- FOREGROUND TEXT -->
   <div class="content">
     <div class="text-box">
+
       <p>
         I never really thought of myself as someone who deserved a happy ever after 🫶  
         Love always felt like something that happened to other people, not me.
@@ -154,7 +174,7 @@
       </p>
 
       <p>
-        You make me a better person without even trying.  
+        You make me a better person without even trying. And sometimes, you try very hard. I see that, too.  
         You make me feel seen, safe, and loved in ways I never expected 🤍
       </p>
 
@@ -166,6 +186,11 @@
       <div class="caption">
         Some things feel better when they’re discovered slowly 💗
       </div>
+
+      <a href="game.html" class="next-btn">
+        Shut up and get to the point 😒👉
+      </a>
+
     </div>
   </div>
 
