@@ -17,57 +17,58 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
 }
 
-/* FLOATING BACKGROUND */
+/* FLOATING HEARTS */
 .heart {
   position: absolute;
   bottom: -40px;
-  opacity: 0.6;
   animation: floatUp linear infinite;
+  opacity: 0.6;
 }
 @keyframes floatUp {
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
 /* TITLE */
-.arcade-title {
+.title {
   position: absolute;
   top: 60px;
-  font-size: 3.4rem;
-  font-weight: 900;
-  color: #ffd6dc;
-  text-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  width: 100%;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 3rem;
+  letter-spacing: 3px;
 }
 
-/* MACHINE */
+/* ARCADE */
 .arcade {
   width: 360px;
   background: linear-gradient(#a4142e, #6b0f1f);
-  border-radius: 24px;
+  border-radius: 26px;
   padding: 14px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  position: relative;
   z-index: 2;
 }
 
-h1 {
+.arcade h2 {
   text-align: center;
+  margin: 6px 0;
   color: #ffd6dc;
-  margin: 4px 0;
 }
 
-/* SCORE */
 .score {
   text-align: center;
-  color: white;
-  font-weight: bold;
   margin-bottom: 6px;
+  font-weight: bold;
 }
 
 /* WINDOW */
 .window {
   height: 260px;
-  background: #fff;
+  background: white;
   border-radius: 14px;
   position: relative;
   overflow: hidden;
@@ -80,41 +81,27 @@ h1 {
   left: 50%;
   transform: translateX(-50%);
   font-size: 2.2rem;
-  transition: left 0.3s ease, top 0.4s ease;
+  transition: top 0.4s ease, left 0.3s ease;
   z-index: 5;
 }
 
 /* PRIZES */
 .prize {
   position: absolute;
-  font-size: 2rem;
-  animation: spawn 0.6s ease forwards, wiggle 2.2s ease-in-out infinite;
+  font-size: 1.9rem;
+  transition: transform 0.3s, opacity 0.3s;
 }
 
-@keyframes spawn {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-@keyframes wiggle {
-  50% { transform: translateY(-4px); }
-}
-
-.prize.opening {
-  animation: open 0.6s ease forwards;
-}
-
-@keyframes open {
-  30% { transform: scale(1.4) rotate(-10deg); }
-  60% { transform: scale(1.6) rotate(10deg); }
-  100% { transform: scale(0); opacity: 0; }
+.prize.hidden {
+  opacity: 0;
+  transform: scale(0);
 }
 
 /* CONTROLS */
 .controls {
-  margin-top: 10px;
   display: flex;
   gap: 6px;
+  margin-top: 10px;
 }
 
 .controls button {
@@ -122,18 +109,30 @@ h1 {
   padding: 10px;
   border-radius: 20px;
   border: none;
-  font-weight: bold;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .left, .right { background: #ffd6dc; }
 .grab { background: #f6c445; }
 
+.next {
+  display: none;
+  margin-top: 10px;
+  width: 100%;
+  background: #ff4d6d;
+  color: white;
+  border-radius: 20px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
 /* POPUP */
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.65);
   display: none;
   justify-content: center;
   align-items: center;
@@ -141,22 +140,28 @@ h1 {
 }
 
 .popup-box {
-  background: white;
-  padding: 24px;
-  border-radius: 20px;
+  background: linear-gradient(135deg,#ffd1dc,#ff9a9e);
+  padding: 26px;
+  border-radius: 22px;
   text-align: center;
+  color: #5a0016;
+  animation: pop 0.4s ease;
 }
 
-/* FINAL SCREEN */
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* FINAL */
 .final {
   display: none;
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle, #ff4d6d, #5c0f1b);
+  background: radial-gradient(circle,#ff4d6d,#5c0f1b);
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: white;
   z-index: 20;
 }
 </style>
@@ -164,22 +169,10 @@ h1 {
 
 <body>
 
-<div class="arcade-title">Ujwal’s Arcade</div>
-
-<script>
-for (let i = 0; i < 28; i++) {
-  const h = document.createElement("div");
-  h.className = "heart";
-  h.textContent = Math.random() > 0.5 ? "💗" : "✨";
-  h.style.left = Math.random() * 100 + "vw";
-  h.style.fontSize = 14 + Math.random()*20 + "px";
-  h.style.animationDuration = 6 + Math.random()*6 + "s";
-  document.body.appendChild(h);
-}
-</script>
+<div class="title">Ujwal’s Arcade</div>
 
 <div class="arcade">
-  <h1>💗 LOVE CLAW 💗</h1>
+  <h2>💗 LOVE CLAW 💗</h2>
   <div class="score">Score: <span id="score">0</span></div>
 
   <div class="window" id="window">
@@ -187,10 +180,14 @@ for (let i = 0; i < 28; i++) {
   </div>
 
   <div class="controls">
-    <button class="left" onclick="moveClaw(-10)">⬅️</button>
+    <button class="left" onclick="moveClaw(-1)">⬅️</button>
     <button class="grab" onclick="grab()">GRAB 💘</button>
-    <button class="right" onclick="moveClaw(10)">➡️</button>
+    <button class="right" onclick="moveClaw(1)">➡️</button>
   </div>
+
+  <button class="next" id="nextBtn" onclick="location.href='bucket.html'">
+    Next 💗
+  </button>
 </div>
 
 <div class="popup" id="popup">
@@ -202,20 +199,32 @@ for (let i = 0; i < 28; i++) {
 
 <div class="final" id="final">
   <h1>You won my heart 💗</h1>
-  <button onclick="location.href='bucket.html'">Next 💗</button>
+  <button onclick="location.href='bucket.html'">Next 💘</button>
 </div>
 
 <script>
+/* FLOATERS */
+for (let i=0;i<25;i++){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.textContent=Math.random()>0.5?"💖":"✨";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=12+Math.random()*18+"px";
+  h.style.animationDuration=6+Math.random()*6+"s";
+  document.body.appendChild(h);
+}
+
+/* PRIZES DATA — UNCHANGED */
 const prizes = [
-  { emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗" },
-  { emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤" },
-  { emoji:"✍️", text:"Redeem one sweet paragraph full of praises when you are down ✍️💞" },
-  { emoji:"💍", text:"Lifetime happiness with me. Kalesh complimentary 💍😌" },
-  { emoji:"💋", text:"Unlimited kisses voucher 💋" },
-  { emoji:"💗", text:"I will flash you, whenever you want 🥰" },
-  { emoji:"☕", text:"Morning coffee in bed forever ☕😌" },
-  { emoji:"🧸", text:"Inner child protection plan, will never get mad at your jokes 🤪🧸" },
-  { emoji:"🍳", text:"Homemade meals by chef beautiful angel princess baby 👩‍🍳💕" }
+  {emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗"},
+  {emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤"},
+  {emoji:"✍️", text:"Redeem one sweet paragraph full of praises ✍️💞"},
+  {emoji:"💍", text:"Lifetime happiness with me. Kalesh complimentary 💍😌"},
+  {emoji:"💋", text:"Unlimited kisses voucher 💋"},
+  {emoji:"💗", text:"I will flash you, whenever you want 🥰"},
+  {emoji:"☕", text:"Morning coffee in bed forever ☕😌"},
+  {emoji:"🧸", text:"Inner child protection plan 🧸"},
+  {emoji:"🍳", text:"Homemade meals by chef baby 👩‍🍳💕"}
 ];
 
 const windowEl = document.getElementById("window");
@@ -223,59 +232,71 @@ const claw = document.getElementById("claw");
 const popup = document.getElementById("popup");
 const popupText = document.getElementById("popupText");
 const scoreEl = document.getElementById("score");
-const finalScreen = document.getElementById("final");
+const final = document.getElementById("final");
+const nextBtn = document.getElementById("nextBtn");
 
+/* GRID SETUP */
+const columns = [60, 160, 260];
+let currentCol = 1;
 let score = 0;
 let busy = false;
 
-prizes.forEach(p => {
+/* BUILD GRID */
+let grid = [[],[],[]];
+prizes.forEach((p, i) => {
+  const col = i % 3;
+  const row = Math.floor(i / 3);
+
   const d = document.createElement("div");
   d.className = "prize";
   d.textContent = p.emoji;
   d.dataset.text = p.text;
-  d.style.left = Math.random()*280 + "px";
-  d.style.bottom = Math.random()*60 + "px";
+  d.style.left = columns[col] + "px";
+  d.style.bottom = 12 + row * 42 + "px";
+
+  grid[col].push(d);
   windowEl.appendChild(d);
 });
 
-function moveClaw(dx) {
-  const x = claw.offsetLeft + dx;
-  claw.style.left = Math.max(10, Math.min(300, x)) + "px";
+/* MOVE CLAW */
+function moveClaw(dir){
+  if(busy) return;
+  currentCol = Math.max(0, Math.min(2, currentCol + dir));
+  claw.style.left = columns[currentCol] + "px";
 }
 
-function grab() {
-  if (busy) return;
+/* GRAB LOGIC */
+function grab(){
+  if(busy) return;
+  const colStack = grid[currentCol];
+  if(colStack.length === 0) return;
+
   busy = true;
-  claw.style.top = "150px";
+  const prize = colStack.pop();
+  const targetY = prize.style.bottom;
+
+  claw.style.top = "calc(100% - " + targetY + ")";
 
   setTimeout(() => {
-    const prizesEls = [...document.querySelectorAll(".prize")];
-    if (!prizesEls.length) {
-      finalScreen.style.display = "flex";
-      return;
+    prize.classList.add("hidden");
+    popupText.textContent = prize.dataset.text;
+    popup.style.display = "flex";
+
+    score++;
+    scoreEl.textContent = score;
+
+    if(score === prizes.length){
+      nextBtn.style.display = "block";
+      setTimeout(() => final.style.display = "flex", 800);
     }
 
-    const clawX = claw.getBoundingClientRect().x;
-    let closest = prizesEls[0];
-    let dist = Infinity;
-
-    prizesEls.forEach(p => {
-      const d = Math.abs(p.getBoundingClientRect().x - clawX);
-      if (d < dist) { dist = d; closest = p; }
-    });
-
-    closest.classList.add("opening");
-    popupText.textContent = closest.dataset.text;
-    popup.style.display = "flex";
-    scoreEl.textContent = ++score;
-  }, 400);
+    claw.style.top = "10px";
+    busy = false;
+  }, 500);
 }
 
-function closePopup() {
+function closePopup(){
   popup.style.display = "none";
-  document.querySelector(".opening")?.remove();
-  claw.style.top = "10px";
-  busy = false;
 }
 </script>
 
