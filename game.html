@@ -10,127 +10,112 @@
 
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background: #7b1d2a;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  color: #fff;
+  background: radial-gradient(circle at top, #b3122f, #5c0f1b);
 }
 
-/* ARCADE CABINET */
+/* FLOATING HEARTS BACKGROUND */
+.heart {
+  position: absolute;
+  bottom: -40px;
+  font-size: 20px;
+  animation: floatUp linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(0) scale(1); opacity: 0.8; }
+  to { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+}
+
+/* ARCADE */
 .arcade {
+  position: relative;
   width: 360px;
-  background: linear-gradient(#b71c2a, #7b1d2a);
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  background: linear-gradient(#a4142e, #6b0f1f);
+  border-radius: 22px;
   padding: 16px;
-  text-align: center;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  z-index: 2;
 }
 
 /* HEADER */
 .header {
-  background: #8c1d2c;
-  border-radius: 12px;
-  padding: 10px;
-  margin-bottom: 10px;
+  text-align: center;
+  color: #ffd6dc;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 
-.header small {
-  font-size: 0.8rem;
-  opacity: 0.9;
+.header p {
+  margin: 4px 0 12px;
+  font-size: 0.85rem;
 }
 
 /* GAME WINDOW */
 .window {
   background: #fff;
-  color: #4a1f2c;
-  height: 260px;
-  border-radius: 12px;
+  height: 230px;
+  border-radius: 14px;
   position: relative;
   overflow: hidden;
-  margin: 12px 0;
+  margin-bottom: 14px;
 }
 
 /* CLAW */
 .claw {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 2rem;
-  transition: left 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
-.string {
+/* PRIZE CLUSTER */
+.prize-cluster {
   position: absolute;
-  top: 20px;
-  left: 50%;
-  width: 3px;
-  height: 0;
-  background: #ccc;
-  transform: translateX(-50%);
+  bottom: 14px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 12px;
 }
 
-/* PRIZE */
 .prize {
-  position: absolute;
-  bottom: 20px;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.prize.redeemed {
+  opacity: 0;
+  transform: scale(0);
 }
 
 /* CONTROLS */
 .controls {
   display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
+  gap: 8px;
 }
 
 .controls button {
   flex: 1;
-  margin: 0 4px;
   padding: 10px;
   border-radius: 20px;
   border: none;
-  background: #f4c430;
-  color: #7b1d2a;
+  background: #f6c445;
+  color: #6b0f1f;
   font-weight: bold;
-  cursor: pointer;
-}
-
-/* POPUP */
-.popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.popup-box {
-  background: #fff;
-  color: #4a1f2c;
-  padding: 24px;
-  border-radius: 20px;
-  width: 280px;
-  text-align: center;
-}
-
-.popup-box button {
-  margin-top: 16px;
-  padding: 10px 24px;
-  border-radius: 20px;
-  border: none;
-  background: #ff4d6d;
-  color: #fff;
   cursor: pointer;
 }
 </style>
@@ -138,120 +123,72 @@ body {
 
 <body>
 
+<!-- FLOATING HEARTS -->
+<script>
+for (let i = 0; i < 25; i++) {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = Math.random() > 0.5 ? "💖" : "✨";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = 6 + Math.random() * 6 + "s";
+  h.style.fontSize = 14 + Math.random() * 20 + "px";
+  document.body.appendChild(h);
+}
+</script>
+
 <div class="arcade">
   <div class="header">
-    <h1>💖 LOVE ARCADE 💖</h1>
-    <small>Try your luck, baby 😌</small>
+    <h1>💗 LOVE ARCADE 💗</h1>
+    <p>Redeem everything. No skipping 😌</p>
   </div>
 
-  <div class="window" id="window">
+  <div class="window">
     <div class="claw" id="claw">🤖</div>
-    <div class="string" id="string"></div>
+
+    <div class="prize-cluster" id="cluster">
+      <div class="prize">📷</div>
+      <div class="prize">🍕</div>
+      <div class="prize">✍️</div>
+      <div class="prize">💍</div>
+      <div class="prize">💋</div>
+      <div class="prize">💗</div>
+      <div class="prize">☕</div>
+      <div class="prize">🧸</div>
+      <div class="prize">🍳</div>
+    </div>
   </div>
 
   <div class="controls">
-    <button onclick="moveClaw(-40)">◀ LEFT</button>
-    <button onclick="dropClaw()">GRAB 💘</button>
-    <button onclick="moveClaw(40)">RIGHT ▶</button>
+    <button onclick="wiggleClaw()">◀ LEFT</button>
+    <button onclick="redeem()">GRAB 💘</button>
+    <button onclick="wiggleClaw()">RIGHT ▶</button>
   </div>
 </div>
 
 <script>
-const windowEl = document.getElementById("window");
 const claw = document.getElementById("claw");
-const string = document.getElementById("string");
+const prizes = document.querySelectorAll(".prize");
+let index = 0;
 
-let clawX = windowEl.offsetWidth / 2;
-let dropping = false;
-
-/* YOUR PRIZES — UNTOUCHED CONTENT */
-const prizes = [
-  { emoji: "📷", text: "Starting today, I will post on Instagram regularly 📸💗" },
-  { emoji: "🍕", text: "For 30 days, I will not touch junk food 😤🍕" },
-  { emoji: "✍️", text: "You can redeem one sweet paragraph with your praises when you are down 💌" },
-  { emoji: "💍", text: "Redeem a lifetime of happiness with me. Kalesh complimentary 😌💍" },
-
-  { emoji: "💋", text: "Unlimited kisses voucher 💋" },
-  { emoji: "💗", text: "Lifetime cuddles subscription activated 🥰" },
-  { emoji: "☕", text: "Coffee dates on demand ☕😌" },
-  { emoji: "🧸", text: "Inner child protection & care plan 🤪🧸" },
-  { emoji: "🍳", text: "Homemade meals by baby 👩‍🍳💕" }
-];
-
-let currentPrize = null;
-
-function spawnPrize() {
-  if (!prizes.length) return;
-  const data = prizes.shift();
-  const p = document.createElement("div");
-  p.className = "prize";
-  p.textContent = data.emoji;
-  p.dataset.text = data.text;
-  p.style.left = Math.random() * 80 + "%";
-  windowEl.appendChild(p);
-  currentPrize = p;
+function wiggleClaw() {
+  claw.style.transform = "translateX(-50%) rotate(-15deg)";
+  setTimeout(() => {
+    claw.style.transform = "translateX(-50%) rotate(15deg)";
+  }, 150);
+  setTimeout(() => {
+    claw.style.transform = "translateX(-50%)";
+  }, 300);
 }
 
-spawnPrize();
-
-function moveClaw(delta) {
-  if (dropping) return;
-  clawX = Math.max(20, Math.min(windowEl.offsetWidth - 20, clawX + delta));
-  claw.style.left = clawX + "px";
-  string.style.left = clawX + "px";
-}
-
-function dropClaw() {
-  if (dropping || !currentPrize) return;
-  dropping = true;
-  let height = 0;
-
-  const fall = setInterval(() => {
-    height += 10;
-    string.style.height = height + "px";
-
-    const clawRect = claw.getBoundingClientRect();
-    const prizeRect = currentPrize.getBoundingClientRect();
-
-    if (clawRect.bottom >= prizeRect.top) {
-      clearInterval(fall);
-      currentPrize.remove();
-      showPopup(currentPrize.dataset.text);
-    }
-
-    if (height > 200) {
-      clearInterval(fall);
-      resetClaw();
-    }
-  }, 20);
-}
-
-function resetClaw() {
-  string.style.height = "0";
-  dropping = false;
-}
-
-function showPopup(text) {
-  const pop = document.createElement("div");
-  pop.className = "popup";
-  pop.innerHTML = `
-    <div class="popup-box">
-      <p>${text}</p>
-      <button onclick="nextPrize(this)">Continue 😌</button>
-    </div>
-  `;
-  document.body.appendChild(pop);
-}
-
-function nextPrize(btn) {
-  btn.closest(".popup").remove();
-  resetClaw();
-
-  if (prizes.length) {
-    spawnPrize();
-  } else {
+function redeem() {
+  if (index >= prizes.length) {
     window.location.href = "/vday-proposal-for-my-baby/bucket.html";
+    return;
   }
+
+  prizes[index].classList.add("redeemed");
+  wiggleClaw();
+  index++;
 }
 </script>
 
