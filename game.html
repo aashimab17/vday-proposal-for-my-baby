@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
 <title>Love Claw 💗</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
   background: radial-gradient(circle at top, #c9183a, #5c0f1b);
@@ -27,7 +27,6 @@ body {
   opacity: 0.7;
 }
 @keyframes floatUp {
-  from { transform: translateY(0); opacity: 0.8; }
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
@@ -35,23 +34,22 @@ body {
 .arcade {
   width: 360px;
   background: linear-gradient(#a4142e, #6b0f1f);
-  border-radius: 22px;
+  border-radius: 24px;
   padding: 16px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5);
-  position: relative;
   z-index: 2;
 }
 
 h1 {
-  color: #ffd6dc;
   text-align: center;
-  margin: 4px 0 10px;
+  color: #ffd6dc;
+  margin: 6px 0 10px;
 }
 
 /* WINDOW */
 .window {
-  background: #fff;
   height: 260px;
+  background: white;
   border-radius: 14px;
   position: relative;
   overflow: hidden;
@@ -64,11 +62,11 @@ h1 {
   left: 50%;
   transform: translateX(-50%);
   font-size: 2.2rem;
-  transition: top 0.4s ease;
+  transition: top 0.4s ease, left 0.3s ease;
   z-index: 3;
 }
 
-/* PRIZE CLUSTER */
+/* PRIZES */
 .cluster {
   position: absolute;
   bottom: 10px;
@@ -81,7 +79,7 @@ h1 {
 
 .prize {
   font-size: 1.8rem;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition: transform 0.4s, opacity 0.4s;
 }
 
 .prize.hidden {
@@ -92,47 +90,48 @@ h1 {
 /* CONTROLS */
 .controls {
   margin-top: 12px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
 }
 
-button {
-  padding: 10px 30px;
+.controls button {
+  flex: 1;
+  padding: 10px;
   border-radius: 20px;
   border: none;
-  background: #f6c445;
-  color: #6b0f1f;
   font-weight: bold;
   cursor: pointer;
+}
+
+.left { background: #ffd6dc; }
+.grab { background: #f6c445; }
+.right { background: #ffd6dc; }
+
+.next {
+  display: none;
+  margin-top: 10px;
+  width: 100%;
+  background: #ff4d6d;
+  color: white;
 }
 
 /* POPUP */
 .popup {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.6);
   display: none;
   justify-content: center;
   align-items: center;
   z-index: 5;
 }
 
-.popup-content {
-  background: #fff;
-  padding: 26px;
+.popup-box {
+  background: white;
+  padding: 24px;
   border-radius: 20px;
   text-align: center;
-  max-width: 80%;
-}
-
-.popup-content p {
-  font-size: 1.1rem;
-}
-
-.next-btn {
-  display: none;
-  margin-top: 12px;
-  background: #ff4d6d;
-  color: white;
 }
 </style>
 </head>
@@ -140,12 +139,12 @@ button {
 <body>
 
 <script>
-for (let i = 0; i < 28; i++) {
+for (let i = 0; i < 30; i++) {
   const h = document.createElement("div");
   h.className = "heart";
   h.textContent = Math.random() > 0.5 ? "💖" : "✨";
   h.style.left = Math.random() * 100 + "vw";
-  h.style.fontSize = 14 + Math.random() * 20 + "px";
+  h.style.fontSize = 12 + Math.random() * 22 + "px";
   h.style.animationDuration = 6 + Math.random() * 6 + "s";
   document.body.appendChild(h);
 }
@@ -156,37 +155,39 @@ for (let i = 0; i < 28; i++) {
 
   <div class="window">
     <div class="claw" id="claw">🕹️</div>
-
     <div class="cluster" id="cluster"></div>
   </div>
 
   <div class="controls">
-    <button onclick="grabPrize()">GRAB 💘</button>
-    <button class="next-btn" id="nextBtn"
-      onclick="window.location.href='/vday-proposal-for-my-baby/bucket.html'">
-      Next 💗
-    </button>
+    <button class="left" onclick="moveClaw(-40)">⬅️</button>
+    <button class="grab" onclick="grab()">GRAB 💘</button>
+    <button class="right" onclick="moveClaw(40)">➡️</button>
   </div>
+
+  <button class="next" id="nextBtn"
+    onclick="window.location.href='/vday-proposal-for-my-baby/bucket.html'">
+    Next 💗
+  </button>
 </div>
 
 <div class="popup" id="popup">
-  <div class="popup-content">
+  <div class="popup-box">
     <p id="popupText"></p>
     <button onclick="closePopup()">OKAY 😌</button>
   </div>
 </div>
 
 <script>
-const prizesData = [
+const prizes = [
   { emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗" },
   { emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤" },
-  { emoji:"✍️", text:"Redeem one sweet paragraph full of praises ✍️💞" },
+  { emoji:"✍️", text:"Redeem one sweet paragraph full of praises when you are down ✍️💞" },
   { emoji:"💍", text:"Lifetime happiness with me. Kalesh complimentary 💍😌" },
   { emoji:"💋", text:"Unlimited kisses voucher 💋" },
-  { emoji:"💗", text:"Lifetime cuddles subscription activated 🥰" },
-  { emoji:"☕", text:"Coffee dates on demand ☕😌" },
-  { emoji:"🧸", text:"Inner child protection & care plan 🤪🧸" },
-  { emoji:"🍳", text:"Homemade meals by baby 👩‍🍳💕" }
+  { emoji:"💗", text:"I will flash you, whenever you want 🥰" },
+  { emoji:"☕", text:"Morning coffee in bed forever ☕😌" },
+  { emoji:"🧸", text:"Inner child protection plan, will never get mad at your jokes 🤪🧸" },
+  { emoji:"🍳", text:"Homemade meals by chef beautiful angel princess baby 👩‍🍳💕" }
 ];
 
 const cluster = document.getElementById("cluster");
@@ -195,10 +196,11 @@ const popup = document.getElementById("popup");
 const popupText = document.getElementById("popupText");
 const nextBtn = document.getElementById("nextBtn");
 
-let current = 0;
-let grabbing = false;
+let clawX = 50;
+let index = 0;
+let busy = false;
 
-prizesData.forEach(p => {
+prizes.forEach(p => {
   const d = document.createElement("div");
   d.className = "prize";
   d.textContent = p.emoji;
@@ -207,27 +209,32 @@ prizesData.forEach(p => {
 
 const prizeEls = document.querySelectorAll(".prize");
 
-function grabPrize() {
-  if (grabbing || current >= prizeEls.length) return;
-  grabbing = true;
+function moveClaw(dx) {
+  if (busy) return;
+  clawX = Math.min(90, Math.max(10, clawX + dx/3));
+  claw.style.left = clawX + "%";
+}
 
+function grab() {
+  if (busy || index >= prizeEls.length) return;
+  busy = true;
   claw.style.top = "150px";
 
   setTimeout(() => {
-    popupText.textContent = prizesData[current].text;
+    popupText.textContent = prizes[index].text;
     popup.style.display = "flex";
-    prizeEls[current].classList.add("hidden");
+    prizeEls[index].classList.add("hidden");
   }, 500);
 }
 
 function closePopup() {
   popup.style.display = "none";
   claw.style.top = "10px";
-  current++;
-  grabbing = false;
+  index++;
+  busy = false;
 
-  if (current === prizeEls.length) {
-    nextBtn.style.display = "inline-block";
+  if (index === prizeEls.length) {
+    nextBtn.style.display = "block";
   }
 }
 </script>
