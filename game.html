@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ujwal’s Arcade 💗</title>
+<title>Love Claw 💗</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -12,54 +12,38 @@ body {
   margin: 0;
   height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background: radial-gradient(circle at top, #c9183a, #4b0d18);
   overflow: hidden;
+  background: radial-gradient(circle at top, #c9183a, #5c0f1b);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  color: white;
 }
 
-/* FLOATING BACKGROUND */
+/* FLOATING HEARTS */
 .heart {
-  position: fixed;
+  position: absolute;
   bottom: -40px;
-  opacity: 0.5;
   animation: floatUp linear infinite;
+  opacity: 0.7;
 }
 @keyframes floatUp {
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* TITLE */
-.arcade-title {
-  margin-top: 30px;
-  font-size: 3rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-
 /* GAME CARD */
 .arcade {
-  margin-top: 12px;
   width: 360px;
-  background: linear-gradient(#9e1430, #5a0d19);
+  background: linear-gradient(#a4142e, #6b0f1f);
   border-radius: 24px;
   padding: 16px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  z-index: 2;
 }
 
-.arcade h2 {
+h1 {
   text-align: center;
-  margin: 4px 0;
-  font-size: 1.3rem;
   color: #ffd6dc;
-}
-
-.score {
-  text-align: center;
-  margin-bottom: 8px;
-  font-weight: bold;
+  margin: 6px 0 10px;
 }
 
 /* WINDOW */
@@ -69,38 +53,33 @@ body {
   border-radius: 14px;
   position: relative;
   overflow: hidden;
-  padding: 14px;
 }
 
 /* CLAW */
 .claw {
   position: absolute;
-  top: 8px;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 2.2rem;
-  transition: left 0.25s ease, top 0.35s ease;
+  transition: top 0.4s ease, left 0.3s ease;
   z-index: 3;
 }
 
-/* PRIZE GRID */
-.grid {
+/* PRIZES */
+.cluster {
   position: absolute;
   bottom: 10px;
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  padding: 0 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
 .prize {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.8rem;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.4s, opacity 0.4s;
 }
 
 .prize.hidden {
@@ -112,6 +91,7 @@ body {
 .controls {
   margin-top: 12px;
   display: flex;
+  justify-content: space-between;
   gap: 6px;
 }
 
@@ -124,81 +104,70 @@ body {
   cursor: pointer;
 }
 
-.left, .right { background: #ffd6dc; }
+.left { background: #ffd6dc; }
 .grab { background: #f6c445; }
+.right { background: #ffd6dc; }
+
+.next {
+  display: none;
+  margin-top: 10px;
+  width: 100%;
+  background: #ff4d6d;
+  color: white;
+}
 
 /* POPUP */
 .popup {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,0.6);
   display: none;
-  align-items: center;
   justify-content: center;
-  z-index: 10;
+  align-items: center;
+  z-index: 5;
 }
 
 .popup-box {
-  background: linear-gradient(135deg, #ffd1dc, #ff9a9e);
-  padding: 26px;
-  border-radius: 22px;
-  text-align: center;
-  animation: pop 0.4s ease;
-  color: #4a1f2c;
-}
-
-@keyframes pop {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* FINAL */
-.final {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, #ff4d6d, #6b0f1f);
-  z-index: 20;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.final h1 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-}
-
-.final button {
-  padding: 14px 40px;
-  border-radius: 30px;
-  border: none;
   background: white;
-  color: #ff4d6d;
-  font-weight: bold;
-  cursor: pointer;
+  padding: 24px;
+  border-radius: 20px;
+  text-align: center;
 }
 </style>
 </head>
 
 <body>
 
-<div class="arcade-title">Ujwal’s Arcade 🎮</div>
+<script>
+for (let i = 0; i < 30; i++) {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = Math.random() > 0.5 ? "💖" : "✨";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = 12 + Math.random() * 22 + "px";
+  h.style.animationDuration = 6 + Math.random() * 6 + "s";
+  document.body.appendChild(h);
+}
+</script>
 
 <div class="arcade">
-  <h2>💗 LOVE CLAW 💗</h2>
-  <div class="score">Score: <span id="score">0</span></div>
+  <h1>💗 LOVE CLAW 💗</h1>
 
-  <div class="window" id="window">
+  <div class="window">
     <div class="claw" id="claw">🕹️</div>
-    <div class="grid" id="grid"></div>
+    <div class="cluster" id="cluster"></div>
   </div>
 
   <div class="controls">
-    <button class="left" onclick="moveClaw(-33)">⬅️</button>
+    <button class="left" onclick="moveClaw(-40)">⬅️</button>
     <button class="grab" onclick="grab()">GRAB 💘</button>
-    <button class="right" onclick="moveClaw(33)">➡️</button>
+    <button class="right" onclick="moveClaw(40)">➡️</button>
   </div>
+
+  <button class="next" id="nextBtn"
+    onclick="window.location.href='/vday-proposal-for-my-baby/bucket.html'">
+    Next 💗
+  </button>
 </div>
 
 <div class="popup" id="popup">
@@ -208,92 +177,67 @@ body {
   </div>
 </div>
 
-<div class="final" id="final">
-  <h1>You won my heart 💗</h1>
-  <button onclick="location.href='bucket.html'">Next 💌</button>
-</div>
-
 <script>
-/* BACKGROUND FLOATERS */
-for (let i = 0; i < 28; i++) {
-  const h = document.createElement("div");
-  h.className = "heart";
-  h.textContent = Math.random() > 0.5 ? "💖" : "✨";
-  h.style.left = Math.random() * 100 + "vw";
-  h.style.fontSize = 14 + Math.random() * 22 + "px";
-  h.style.animationDuration = 6 + Math.random() * 7 + "s";
-  document.body.appendChild(h);
-}
-
-/* PRIZES (TEXTS UNCHANGED) */
 const prizes = [
-  {emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗"},
-  {emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤"},
-  {emoji:"✍️", text:"Redeem one sweet paragraph full of praises when you are down ✍️💞"},
-  {emoji:"💍", text:"Lifetime happiness with me. Kalesh complimentary 💍😌"},
-  {emoji:"💋", text:"Unlimited kisses voucher 💋"},
-  {emoji:"💗", text:"I will flash you, whenever you want 🥰"},
-  {emoji:"☕", text:"Morning coffee in bed forever ☕😌"},
-  {emoji:"🧸", text:"Inner child protection plan, will never get mad at your jokes 🤪🧸"},
-  {emoji:"🍳", text:"Homemade meals by chef beautiful angel princess baby 👩‍🍳💕"}
+  { emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗" },
+  { emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤" },
+  { emoji:"✍️", text:"Redeem one sweet paragraph full of praises when you are down ✍️💞" },
+  { emoji:"💍", text:"Lifetime happiness with me. Kalesh complimentary 💍😌" },
+  { emoji:"💋", text:"Unlimited kisses voucher 💋" },
+  { emoji:"💗", text:"I will flash you, whenever you want 🥰" },
+  { emoji:"☕", text:"Morning coffee in bed forever ☕😌" },
+  { emoji:"🧸", text:"Inner child protection plan, will never get mad at your jokes 🤪🧸" },
+  { emoji:"🍳", text:"Homemade meals by chef beautiful angel princess baby 👩‍🍳💕" }
 ];
 
-const grid = document.getElementById("grid");
+const cluster = document.getElementById("cluster");
 const claw = document.getElementById("claw");
 const popup = document.getElementById("popup");
 const popupText = document.getElementById("popupText");
-const scoreEl = document.getElementById("score");
-const final = document.getElementById("final");
+const nextBtn = document.getElementById("nextBtn");
 
-let clawCol = 2;
-let score = 0;
+let clawX = 50;
+let index = 0;
 let busy = false;
 
-/* CREATE GRID */
 prizes.forEach(p => {
   const d = document.createElement("div");
   d.className = "prize";
   d.textContent = p.emoji;
-  d.dataset.text = p.text;
-  grid.appendChild(d);
+  cluster.appendChild(d);
 });
+
+const prizeEls = document.querySelectorAll(".prize");
 
 function moveClaw(dx) {
   if (busy) return;
-  clawCol = Math.max(1, Math.min(3, clawCol + Math.sign(dx)));
-  claw.style.left = (clawCol * 33.33) - 16 + "%";
+  clawX = Math.min(90, Math.max(10, clawX + dx/3));
+  claw.style.left = clawX + "%";
 }
 
 function grab() {
-  if (busy) return;
+  if (busy || index >= prizeEls.length) return;
   busy = true;
   claw.style.top = "150px";
 
   setTimeout(() => {
-    const prizesLeft = [...document.querySelectorAll(".prize:not(.hidden)")];
-    const target = prizesLeft.find((_, i) => i % 3 === clawCol - 1);
-
-    if (target) {
-      target.classList.add("hidden");
-      popupText.textContent = target.dataset.text;
-      popup.style.display = "flex";
-      score++;
-      scoreEl.textContent = score;
-    }
-
-    claw.style.top = "8px";
-    busy = false;
-
-    if (!document.querySelector(".prize:not(.hidden)")) {
-      setTimeout(() => final.style.display = "flex", 600);
-    }
-  }, 420);
+    popupText.textContent = prizes[index].text;
+    popup.style.display = "flex";
+    prizeEls[index].classList.add("hidden");
+  }, 500);
 }
 
 function closePopup() {
   popup.style.display = "none";
+  claw.style.top = "10px";
+  index++;
+  busy = false;
+
+  if (index === prizeEls.length) {
+    nextBtn.style.display = "block";
+  }
 }
 </script>
 
 </body>
-</html>
+</html
