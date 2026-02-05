@@ -12,22 +12,53 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #ffb6c1, #ffd1dc);
+  background: radial-gradient(circle at top, #b1122b, #4b000f);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #4a1f2c;
+  overflow: hidden;
 }
 
+/* ===== FLOATING HEARTS ===== */
+.hearts {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.heart {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0.7;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(110vh) scale(0.8);
+    opacity: 0;
+  }
+  20% { opacity: 0.8; }
+  to {
+    transform: translateY(-20vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* ===== CARD ===== */
 .card {
+  position: relative;
+  z-index: 3;
   width: 92%;
   max-width: 620px;
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(14px);
   padding: 40px;
   border-radius: 30px;
   text-align: center;
-  box-shadow: 0 40px 90px rgba(0,0,0,0.25);
+  box-shadow: 0 40px 90px rgba(0,0,0,0.35);
   animation: fadeIn 0.6s ease;
 }
 
@@ -75,6 +106,9 @@ button {
 
 <body>
 
+<!-- FLOATING HEARTS -->
+<div class="hearts" id="hearts"></div>
+
 <!-- INTRO -->
 <div class="card" id="intro">
   <h2>Hey you. Yes, you. 🫵💗</h2>
@@ -101,6 +135,22 @@ button {
 </div>
 
 <script>
+/* ===== HEART GENERATOR ===== */
+const heartContainer = document.getElementById("hearts");
+const heartEmojis = ["💗","💖","✨","💕","💘"];
+
+for (let i = 0; i < 25; i++) {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = 6 + Math.random() * 6 + "s";
+  h.style.animationDelay = Math.random() * 6 + "s";
+  h.style.fontSize = 14 + Math.random() * 18 + "px";
+  heartContainer.appendChild(h);
+}
+
+/* ===== QUIZ LOGIC (UNCHANGED) ===== */
 const questions = [
   {
     q: "1. What was my first thought when I realized I liked you? 💭💗",
@@ -134,22 +184,12 @@ const questions = [
   },
   {
     q: "4. What do I want more of with you? 🥹",
-    options: [
-      "Time",
-      "Memories",
-      "Laughing till it hurts",
-      "A future"
-    ],
+    options: ["Time","Memories","Laughing till it hurts","A future"],
     correct: 3
   },
   {
     q: "5. When I say “I’m fine,” what do I actually want? 😌",
-    options: [
-      "Attention",
-      "A hug",
-      "Reassurance",
-      "All of the above"
-    ],
+    options: ["Attention","A hug","Reassurance","All of the above"],
     correct: 3,
     extra: "Fir dediya karo naaa! 😤💗"
   },
@@ -179,11 +219,9 @@ function startQuiz() {
 function loadQuestion() {
   attempts = 0;
   locked = false;
-
   const q = questions[current];
   document.getElementById("question").innerHTML = `<h2>${q.q}</h2>`;
   document.getElementById("feedback").textContent = "";
-
   const optionsDiv = document.getElementById("options");
   optionsDiv.innerHTML = "";
 
@@ -198,7 +236,6 @@ function loadQuestion() {
 
 function selectAnswer(el, i) {
   if (locked) return;
-
   const q = questions[current];
   const feedback = document.getElementById("feedback");
 
@@ -206,30 +243,18 @@ function selectAnswer(el, i) {
     locked = true;
     el.classList.add("correct");
     feedback.textContent = q.extra || "Correct 😌💗";
-
     setTimeout(() => {
-      if (q.final) {
-        window.location.href = "vday.html";
-      } else {
-        current++;
-        loadQuestion();
-      }
+      if (q.final) window.location.href = "vday.html";
+      else { current++; loadQuestion(); }
     }, 1200);
-
   } else {
     el.classList.add("wrong");
     attempts++;
-
-    if (attempts === 1) {
-      feedback.textContent = "Nope. Try again 😐";
-    } else {
+    if (attempts === 1) feedback.textContent = "Nope. Try again 😐";
+    else {
       locked = true;
       feedback.textContent = `Correct answer: ${q.options[q.correct]} 😌`;
-
-      setTimeout(() => {
-        current++;
-        loadQuestion();
-      }, 1400);
+      setTimeout(() => { current++; loadQuestion(); }, 1400);
     }
   }
 }
