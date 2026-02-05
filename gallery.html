@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ugh. Look at us. 💗</title>
+<title>Ugh. Look at us💗</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -12,88 +12,86 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #8b0015;
   color: white;
-  overflow-x: hidden;
 }
 
-/* ===== HEADER ===== */
-header {
-  text-align: center;
-  padding: 22px 16px 10px;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-/* ===== GALLERY WRAPPER ===== */
-.gallery-section {
-  position: relative;
-  height: calc(100vh - 80px); /* KEY FIX */
-  overflow: hidden;
-}
-
-/* ===== GALLERY GRID ===== */
+/* ===== SHARED GALLERY ===== */
 .gallery {
-  height: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap: 12px;
-  padding: 14px 16px;
-  transition: opacity 0.8s ease;
+  padding: 16px;
+  height: 100%;
 }
 
 .gallery img {
   width: 100%;
-  height: 100%;
-  object-fit: contain; /* IMPORTANT */
+  aspect-ratio: 1 / 1; /* 4:4 FIX */
+  object-fit: contain;
   background: #000;
   border-radius: 14px;
   border: 2px solid rgba(255,255,255,0.9);
 }
 
-/* ===== TEXT OVERLAY ===== */
-.text-overlay {
+/* ===== SCREEN 1 ===== */
+.gallery-screen {
+  height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 20px 16px 8px;
+}
+
+header h1 {
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+/* ===== SCREEN 2 ===== */
+.text-screen {
+  position: relative;
+  height: 100vh;
+}
+
+.text-screen .gallery {
+  opacity: 0.18;
+}
+
+/* GRADIENT OVERLAY */
+.gradient {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+}
+
+/* TEXT BOX */
+.text-box {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
 }
 
-.text-overlay::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-}
-
-.text-box {
-  position: relative;
+.text-content {
   max-width: 760px;
-  max-height: 85vh;
-  overflow-y: auto;
   background: rgba(0,0,0,0.45);
   backdrop-filter: blur(8px);
-  padding: 36px 28px;
+  padding: 34px 26px;
   border-radius: 26px;
   text-align: center;
-  z-index: 2;
 }
 
-.text-box p {
+.text-content p {
   font-size: 1rem;
-  line-height: 1.85;
+  line-height: 1.8;
   margin-bottom: 18px;
 }
 
 .caption {
-  margin-top: 20px;
+  margin-top: 18px;
   font-size: 0.9rem;
   color: #ffb6c1;
 }
@@ -109,10 +107,6 @@ header h1 {
   font-size: 0.95rem;
 }
 
-/* ===== SCROLL EFFECT ===== */
-.scrolled .gallery { opacity: 0.15; }
-.scrolled .text-overlay { opacity: 1; pointer-events: auto; }
-
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .gallery {
@@ -121,7 +115,7 @@ header h1 {
   }
 
   header h1 {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
   }
 }
 </style>
@@ -129,11 +123,11 @@ header h1 {
 
 <body>
 
-<header>
-  <h1>Ugh. Look at us. Made for each other 😒💗</h1>
-</header>
-
-<section class="gallery-section" id="gallerySection">
+<!-- SCREEN 1 -->
+<section class="gallery-screen">
+  <header>
+    <h1>Ugh. Look at us. Made for each other 😒💗</h1>
+  </header>
 
   <div class="gallery">
     <img src="assets/images/photo1.jpg">
@@ -149,24 +143,49 @@ header h1 {
     <img src="assets/images/photo11.jpg">
     <img src="assets/images/photo12.jpg">
   </div>
+</section>
 
-  <div class="text-overlay">
-    <div class="text-box">
+<!-- SCREEN 2 -->
+<section class="text-screen">
+  <div class="gallery">
+    <img src="assets/images/photo1.jpg">
+    <img src="assets/images/photo2.jpg">
+    <img src="assets/images/photo3.jpg">
+    <img src="assets/images/photo4.jpg">
+    <img src="assets/images/photo5.jpg">
+    <img src="assets/images/photo6.jpg">
+    <img src="assets/images/photo7.jpg">
+    <img src="assets/images/photo8.jpg">
+    <img src="assets/images/photo9.jpg">
+    <img src="assets/images/photo10.jpg">
+    <img src="assets/images/photo11.jpg">
+    <img src="assets/images/photo12.jpg">
+  </div>
+
+  <div class="gradient"></div>
+
+  <div class="text-box">
+    <div class="text-content">
 
       <p>
+        I never really thought of myself as someone who deserved a happy ever after 🫶  
         Love always felt like something that happened to other people, not me.
       </p>
 
       <p>
         But somehow, you made me believe again ✨  
+        You made love feel real and possible, like it could actually happen for me too 💖
       </p>
 
       <p>
+        You make me a better person without even trying 🥺  
+        And sometimes, you try very hard. I see that, too.  
         You make me feel seen, safe, and loved in ways I never expected 🤍
       </p>
 
       <p>
-        I love you bubby 🥹💕
+        And yes, you can be absolutely crazy, a little unhinged, and sometimes very stupid 🙄😂  
+        But somehow, that just makes me love you even more 🥹💕
       </p>
 
       <div class="caption">
@@ -179,15 +198,7 @@ header h1 {
 
     </div>
   </div>
-
 </section>
-
-<script>
-const section = document.getElementById("gallerySection");
-window.addEventListener("scroll", () => {
-  section.classList.toggle("scrolled", window.scrollY > 30);
-});
-</script>
 
 </body>
 </html>
