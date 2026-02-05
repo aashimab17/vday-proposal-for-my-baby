@@ -11,28 +11,29 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(180deg, #8b0d2e, #c9184a, #ff758f);
+  background: #8b0d2e;
   color: white;
   overflow-x: hidden;
 }
 
-/* ===== HERO SECTION ===== */
-.hero {
+/* ===== MAIN WRAPPER ===== */
+.section {
   min-height: 100vh;
+  position: relative;
   padding: 40px;
-  display: flex;
-  flex-direction: column;
 }
 
-.hero h1 {
+/* ===== HEADING ===== */
+h1 {
   text-align: center;
   font-weight: 500;
   margin-bottom: 28px;
+  z-index: 2;
+  position: relative;
 }
 
-/* ===== GALLERY (ONE SCREEN) ===== */
+/* ===== GALLERY ===== */
 .gallery {
-  flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
@@ -47,46 +48,50 @@ body {
   transition: opacity 0.6s ease;
 }
 
-/* ===== FADE STATE ===== */
+/* ===== FADE IMAGES ===== */
 .fade .gallery img {
   opacity: 0.25;
 }
 
-/* ===== GRADIENT TRANSITION ===== */
-.gradient {
-  height: 160px;
+/* ===== OVERLAY GRADIENT + TEXT ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(255,117,143,0),
-    rgba(0,0,0,0.55)
+    rgba(0,0,0,0.15),
+    rgba(0,0,0,0.65)
   );
-}
-
-/* ===== TEXT SECTION ===== */
-.text-section {
-  min-height: 100vh;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
   opacity: 0;
-  transform: translateY(40px);
-  transition: 0.8s ease;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  z-index: 5;
 }
 
-.text-section.show {
+.overlay.show {
   opacity: 1;
-  transform: translateY(0);
+  pointer-events: auto;
 }
 
+/* ===== TEXT BOX ===== */
 .text-box {
   max-width: 760px;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
   padding: 55px 60px;
   border-radius: 32px;
   text-align: center;
+  transform: translateY(40px);
+  opacity: 0;
+  transition: 0.8s ease;
+}
+
+.overlay.show .text-box {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .text-box p {
@@ -96,7 +101,7 @@ body {
 }
 
 /* ===== BUTTON ===== */
-.button {
+button {
   margin-top: 32px;
   padding: 14px 40px;
   border-radius: 40px;
@@ -111,7 +116,7 @@ body {
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.7);
   display: none;
   align-items: center;
   justify-content: center;
@@ -124,17 +129,10 @@ body {
   padding: 30px 36px;
   border-radius: 26px;
   text-align: center;
-  max-width: 320px;
 }
 
 .popup-box button {
   margin-top: 18px;
-  padding: 10px 30px;
-  border-radius: 30px;
-  border: none;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
 }
 
 /* ===== MOBILE ===== */
@@ -148,8 +146,7 @@ body {
 
 <body>
 
-<!-- HERO -->
-<section class="hero" id="hero">
+<section class="section" id="section">
   <h1>Ugh. Look at us. Made for each other 💗</h1>
 
   <div class="gallery">
@@ -164,10 +161,8 @@ body {
   </div>
 </section>
 
-<div class="gradient"></div>
-
-<!-- TEXT -->
-<section class="text-section" id="text">
+<!-- OVERLAY TEXT -->
+<div class="overlay" id="overlay">
   <div class="text-box">
     <p>
       I never really thought I deserved a happy ever after 🫶  
@@ -175,20 +170,20 @@ body {
     </p>
 
     <p>
-      But somehow, you made me believe again ✨  
-      You made love feel real and possible 💖
+      And then you happened ✨  
+      Loud. Annoying. Soft. Safe. Mine 💖
     </p>
 
     <p>
-      You’re chaotic, stupid sometimes, and extremely unserious 🙄😂  
-      But unfortunately… I love you 🥺💕
+      Unfortunately for both of us…  
+      this is it now 🥺💕
     </p>
 
-    <button class="button" onclick="showPopup()">
+    <button onclick="showPopup()">
       Chal theek hai ab paka mat 😒👉
     </button>
   </div>
-</section>
+</div>
 
 <!-- POPUP -->
 <div class="popup" id="popup">
@@ -202,13 +197,13 @@ body {
 </div>
 
 <script>
-const hero = document.getElementById("hero");
-const text = document.getElementById("text");
+const section = document.getElementById("section");
+const overlay = document.getElementById("overlay");
 
 window.addEventListener("scroll", () => {
-  if (window.scrollY > 50) {
-    hero.classList.add("fade");
-    text.classList.add("show");
+  if (window.scrollY > 80) {
+    section.classList.add("fade");
+    overlay.classList.add("show");
   }
 });
 
