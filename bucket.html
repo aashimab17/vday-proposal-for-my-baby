@@ -11,22 +11,53 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #ffd1dc, #ffb6c1);
   min-height: 100vh;
+  background: radial-gradient(circle at top, #a4001d, #4b000f);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #4a1f2c;
+  overflow: hidden;
 }
 
+/* ===== FLOATING EMOJIS ===== */
+.floating {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.float {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0.75;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(110vh) scale(0.8);
+    opacity: 0;
+  }
+  20% { opacity: 0.9; }
+  to {
+    transform: translateY(-20vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* ===== CARD ===== */
 .container {
+  position: relative;
+  z-index: 2;
   width: 92%;
   max-width: 620px;
-  background: rgba(255,255,255,0.45);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(14px);
   padding: 40px;
   border-radius: 28px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.3);
 }
 
 h2 {
@@ -39,6 +70,13 @@ h2 {
   font-size: 1rem;
   margin-bottom: 28px;
   line-height: 1.6;
+}
+
+.instructions small {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.85;
 }
 
 .list {
@@ -72,10 +110,20 @@ button {
   font-size: 1rem;
   cursor: pointer;
 }
+
+.error {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: #7a1f2c;
+  display: none;
+}
 </style>
 </head>
 
 <body>
+
+<!-- FLOATING BUCKET LIST EMOJIS -->
+<div class="floating" id="floating"></div>
 
 <div class="container">
   <h2>Our Bucket List 💗</h2>
@@ -84,6 +132,9 @@ button {
     Things we want to do together.<br>
     Big, small, silly, serious.<br>
     Just us.
+    <small>
+      Everything you write here gets saved on this website forever 😌
+    </small>
   </div>
 
   <div class="list">
@@ -101,13 +152,33 @@ button {
 
   <div class="footer">
     <button onclick="goNext()">Sab karenge baby 😌💌</button>
+    <div class="error" id="error">
+      All 10 have to be filled. No skipping 😏
+    </div>
   </div>
 </div>
 
 <script>
-const inputs = document.querySelectorAll("input");
+/* ===== FLOATING EMOJI GENERATOR ===== */
+const floatWrap = document.getElementById("floating");
+const emojis = ["💗","💖","✨","🏖️","⛰️","🚴‍♂️","🤿","💍","💕"];
 
-/* quiet autosave (no pressure, no warnings) */
+for (let i = 0; i < 30; i++) {
+  const e = document.createElement("div");
+  e.className = "float";
+  e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  e.style.left = Math.random() * 100 + "vw";
+  e.style.animationDuration = 6 + Math.random() * 6 + "s";
+  e.style.animationDelay = Math.random() * 6 + "s";
+  e.style.fontSize = 16 + Math.random() * 20 + "px";
+  floatWrap.appendChild(e);
+}
+
+/* ===== BUCKET LIST LOGIC ===== */
+const inputs = document.querySelectorAll("input");
+const error = document.getElementById("error");
+
+/* autosave forever (dramatically) */
 inputs.forEach((input, index) => {
   const saved = localStorage.getItem("bucket_" + index);
   if (saved) input.value = saved;
@@ -118,6 +189,17 @@ inputs.forEach((input, index) => {
 });
 
 function goNext() {
+  let filled = true;
+
+  inputs.forEach(input => {
+    if (!input.value.trim()) filled = false;
+  });
+
+  if (!filled) {
+    error.style.display = "block";
+    return;
+  }
+
   window.location.href = "/vday-proposal-for-my-baby/scratchit.html";
 }
 </script>
