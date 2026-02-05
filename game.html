@@ -17,58 +17,57 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
 }
 
-/* FLOATING HEARTS */
+/* FLOATING BACKGROUND */
 .heart {
   position: absolute;
   bottom: -40px;
+  opacity: 0.6;
   animation: floatUp linear infinite;
-  opacity: 0.7;
 }
 @keyframes floatUp {
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
 /* TITLE */
-.title {
+.arcade-title {
   position: absolute;
   top: 60px;
-  text-align: center;
-  width: 100%;
-  font-family: 'Courier New', monospace;
-  font-size: 3rem;
-  letter-spacing: 3px;
+  font-size: 3.4rem;
+  font-weight: 900;
+  color: #ffd6dc;
+  text-shadow: 0 6px 20px rgba(0,0,0,0.4);
 }
 
-/* GAME */
+/* MACHINE */
 .arcade {
   width: 360px;
   background: linear-gradient(#a4142e, #6b0f1f);
-  border-radius: 26px;
+  border-radius: 24px;
   padding: 14px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5);
-  position: relative;
   z-index: 2;
 }
 
-.arcade h2 {
+h1 {
   text-align: center;
-  margin: 6px 0;
   color: #ffd6dc;
+  margin: 4px 0;
 }
 
+/* SCORE */
 .score {
   text-align: center;
-  margin-bottom: 6px;
+  color: white;
   font-weight: bold;
+  margin-bottom: 6px;
 }
 
 /* WINDOW */
 .window {
   height: 260px;
-  background: white;
+  background: #fff;
   border-radius: 14px;
   position: relative;
   overflow: hidden;
@@ -81,27 +80,41 @@ body {
   left: 50%;
   transform: translateX(-50%);
   font-size: 2.2rem;
-  transition: top 0.4s ease, left 0.3s ease;
+  transition: left 0.3s ease, top 0.4s ease;
   z-index: 5;
 }
 
 /* PRIZES */
 .prize {
   position: absolute;
-  font-size: 1.8rem;
-  transition: transform 0.3s, opacity 0.3s;
+  font-size: 2rem;
+  animation: spawn 0.6s ease forwards, wiggle 2.2s ease-in-out infinite;
 }
 
-.prize.hidden {
-  opacity: 0;
-  transform: scale(0);
+@keyframes spawn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wiggle {
+  50% { transform: translateY(-4px); }
+}
+
+.prize.opening {
+  animation: open 0.6s ease forwards;
+}
+
+@keyframes open {
+  30% { transform: scale(1.4) rotate(-10deg); }
+  60% { transform: scale(1.6) rotate(10deg); }
+  100% { transform: scale(0); opacity: 0; }
 }
 
 /* CONTROLS */
 .controls {
+  margin-top: 10px;
   display: flex;
   gap: 6px;
-  margin-top: 10px;
 }
 
 .controls button {
@@ -109,30 +122,18 @@ body {
   padding: 10px;
   border-radius: 20px;
   border: none;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .left, .right { background: #ffd6dc; }
 .grab { background: #f6c445; }
 
-.next {
-  display: none;
-  margin-top: 10px;
-  width: 100%;
-  background: #ff4d6d;
-  color: white;
-  border-radius: 20px;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-}
-
 /* POPUP */
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,0.6);
   display: none;
   justify-content: center;
   align-items: center;
@@ -140,28 +141,22 @@ body {
 }
 
 .popup-box {
-  background: linear-gradient(135deg,#ffd1dc,#ff9a9e);
-  padding: 26px;
-  border-radius: 22px;
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
   text-align: center;
-  color: #5a0016;
-  animation: pop 0.4s ease;
 }
 
-@keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* FINAL */
+/* FINAL SCREEN */
 .final {
   display: none;
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle,#ff4d6d,#5c0f1b);
+  background: radial-gradient(circle, #ff4d6d, #5c0f1b);
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  color: white;
   z-index: 20;
 }
 </style>
@@ -169,10 +164,22 @@ body {
 
 <body>
 
-<div class="title">Ujwal’s Arcade</div>
+<div class="arcade-title">Ujwal’s Arcade</div>
+
+<script>
+for (let i = 0; i < 28; i++) {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = Math.random() > 0.5 ? "💗" : "✨";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.fontSize = 14 + Math.random()*20 + "px";
+  h.style.animationDuration = 6 + Math.random()*6 + "s";
+  document.body.appendChild(h);
+}
+</script>
 
 <div class="arcade">
-  <h2>💗 LOVE CLAW 💗</h2>
+  <h1>💗 LOVE CLAW 💗</h1>
   <div class="score">Score: <span id="score">0</span></div>
 
   <div class="window" id="window">
@@ -180,14 +187,10 @@ body {
   </div>
 
   <div class="controls">
-    <button class="left" onclick="moveClaw(-15)">⬅️</button>
+    <button class="left" onclick="moveClaw(-10)">⬅️</button>
     <button class="grab" onclick="grab()">GRAB 💘</button>
-    <button class="right" onclick="moveClaw(15)">➡️</button>
+    <button class="right" onclick="moveClaw(10)">➡️</button>
   </div>
-
-  <button class="next" id="nextBtn" onclick="location.href='bucket.html'">
-    Next 💗
-  </button>
 </div>
 
 <div class="popup" id="popup">
@@ -199,93 +202,80 @@ body {
 
 <div class="final" id="final">
   <h1>You won my heart 💗</h1>
-  <button onclick="location.href='bucket.html'">Next 💘</button>
+  <button onclick="location.href='bucket.html'">Next 💗</button>
 </div>
 
 <script>
-/* FLOATERS */
-for (let i=0;i<30;i++){
-  const h=document.createElement("div");
-  h.className="heart";
-  h.textContent=Math.random()>0.5?"💖":"✨";
-  h.style.left=Math.random()*100+"vw";
-  h.style.fontSize=12+Math.random()*20+"px";
-  h.style.animationDuration=6+Math.random()*6+"s";
-  document.body.appendChild(h);
-}
-
-/* GAME LOGIC */
-const prizes=[
- {emoji:"📷",text:"Starting today, I will post on Instagram regularly 📸💗"},
- {emoji:"🍕",text:"For 30 days, I will not touch junk food 🍕😤"},
- {emoji:"✍️",text:"Redeem one sweet paragraph full of praises ✍️💞"},
- {emoji:"💍",text:"Lifetime happiness with me. Kalesh complimentary 💍😌"},
- {emoji:"💋",text:"Unlimited kisses voucher 💋"},
- {emoji:"💗",text:"I will flash you, whenever you want 🥰"},
- {emoji:"☕",text:"Morning coffee in bed forever ☕😌"},
- {emoji:"🧸",text:"Inner child protection plan 🧸"},
- {emoji:"🍳",text:"Homemade meals by chef baby 👩‍🍳💕"}
+const prizes = [
+  { emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗" },
+  { emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤" },
+  { emoji:"✍️", text:"Redeem one sweet paragraph full of praises when you are down ✍️💞" },
+  { emoji:"💍", text:"Lifetime happiness with me. Kalesh complimentary 💍😌" },
+  { emoji:"💋", text:"Unlimited kisses voucher 💋" },
+  { emoji:"💗", text:"I will flash you, whenever you want 🥰" },
+  { emoji:"☕", text:"Morning coffee in bed forever ☕😌" },
+  { emoji:"🧸", text:"Inner child protection plan, will never get mad at your jokes 🤪🧸" },
+  { emoji:"🍳", text:"Homemade meals by chef beautiful angel princess baby 👩‍🍳💕" }
 ];
 
-const windowEl=document.getElementById("window");
-const claw=document.getElementById("claw");
-const popup=document.getElementById("popup");
-const popupText=document.getElementById("popupText");
-const scoreEl=document.getElementById("score");
-const final=document.getElementById("final");
-let clawX=50,score=0,busy=false;
+const windowEl = document.getElementById("window");
+const claw = document.getElementById("claw");
+const popup = document.getElementById("popup");
+const popupText = document.getElementById("popupText");
+const scoreEl = document.getElementById("score");
+const finalScreen = document.getElementById("final");
 
-prizes.forEach(p=>{
-  const d=document.createElement("div");
-  d.className="prize";
-  d.textContent=p.emoji;
-  d.dataset.text=p.text;
+let score = 0;
+let busy = false;
 
-  d.style.left=140+(Math.random()-0.5)*140+"px";
-  d.style.bottom=10+Math.random()*40+"px";
-
+prizes.forEach(p => {
+  const d = document.createElement("div");
+  d.className = "prize";
+  d.textContent = p.emoji;
+  d.dataset.text = p.text;
+  d.style.left = Math.random()*280 + "px";
+  d.style.bottom = Math.random()*60 + "px";
   windowEl.appendChild(d);
 });
 
-function moveClaw(dx){
-  if(busy)return;
-  clawX=Math.max(10,Math.min(90,clawX+dx));
-  claw.style.left=clawX+"%";
+function moveClaw(dx) {
+  const x = claw.offsetLeft + dx;
+  claw.style.left = Math.max(10, Math.min(300, x)) + "px";
 }
 
-function grab(){
-  if(busy)return;
-  busy=true;
-  claw.style.top="150px";
+function grab() {
+  if (busy) return;
+  busy = true;
+  claw.style.top = "150px";
 
-  setTimeout(()=>{
-    const prizesEls=[...document.querySelectorAll(".prize:not(.hidden)")];
-    let caught=null;
+  setTimeout(() => {
+    const prizesEls = [...document.querySelectorAll(".prize")];
+    if (!prizesEls.length) {
+      finalScreen.style.display = "flex";
+      return;
+    }
 
-    prizesEls.forEach(p=>{
-      const pr=p.getBoundingClientRect();
-      const cr=claw.getBoundingClientRect();
-      if(Math.abs(pr.left-cr.left)<30) caught=p;
+    const clawX = claw.getBoundingClientRect().x;
+    let closest = prizesEls[0];
+    let dist = Infinity;
+
+    prizesEls.forEach(p => {
+      const d = Math.abs(p.getBoundingClientRect().x - clawX);
+      if (d < dist) { dist = d; closest = p; }
     });
 
-    if(caught){
-      caught.classList.add("hidden");
-      popupText.textContent=caught.dataset.text;
-      popup.style.display="flex";
-      score++;
-      scoreEl.textContent=score;
-
-      if(score===prizes.length){
-        setTimeout(()=>final.style.display="flex",800);
-      }
-    }
-    claw.style.top="10px";
-    busy=false;
-  },500);
+    closest.classList.add("opening");
+    popupText.textContent = closest.dataset.text;
+    popup.style.display = "flex";
+    scoreEl.textContent = ++score;
+  }, 400);
 }
 
-function closePopup(){
-  popup.style.display="none";
+function closePopup() {
+  popup.style.display = "none";
+  document.querySelector(".opening")?.remove();
+  claw.style.top = "10px";
+  busy = false;
 }
 </script>
 
