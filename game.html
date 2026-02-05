@@ -34,11 +34,11 @@ body {
 /* TITLE */
 .title {
   position: absolute;
-  top: 60px;
+  top: 70px;
   width: 100%;
   text-align: center;
   font-family: 'Courier New', monospace;
-  font-size: 3rem;
+  font-size: 3.2rem;
   letter-spacing: 3px;
 }
 
@@ -78,10 +78,8 @@ body {
 .claw {
   position: absolute;
   top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
   font-size: 2.2rem;
-  transition: top 0.4s ease, left 0.3s ease;
+  transition: top 0.4s ease, left 0.25s ease;
   z-index: 5;
 }
 
@@ -214,7 +212,7 @@ for (let i=0;i<25;i++){
   document.body.appendChild(h);
 }
 
-/* PRIZES DATA — UNCHANGED */
+/* PRIZES — UNCHANGED TEXTS */
 const prizes = [
   {emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗"},
   {emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤"},
@@ -235,47 +233,54 @@ const scoreEl = document.getElementById("score");
 const final = document.getElementById("final");
 const nextBtn = document.getElementById("nextBtn");
 
-/* GRID SETUP */
-const columns = [60, 160, 260];
-let currentCol = 1;
 let score = 0;
 let busy = false;
 
-/* BUILD GRID */
-let grid = [[],[],[]];
-prizes.forEach((p, i) => {
-  const col = i % 3;
-  const row = Math.floor(i / 3);
+/* BUILD CLUSTER */
+const cluster = [];
+const baseX = 180;
+let baseY = 24;
 
+prizes.forEach((p, i) => {
   const d = document.createElement("div");
   d.className = "prize";
   d.textContent = p.emoji;
   d.dataset.text = p.text;
-  d.style.left = columns[col] + "px";
-  d.style.bottom = 12 + row * 42 + "px";
 
-  grid[col].push(d);
+  const xOffset = (Math.random() * 40) - 20;
+  const yOffset = i * 28 + (Math.random() * 12);
+
+  d.style.left = baseX + xOffset + "px";
+  d.style.bottom = baseY + yOffset + "px";
+
+  cluster.push(d);
   windowEl.appendChild(d);
 });
 
-/* MOVE CLAW */
+/* MOVE CLAW TO NEAREST EMOJI */
+let clawIndex = Math.floor(cluster.length / 2);
+updateClaw();
+
 function moveClaw(dir){
   if(busy) return;
-  currentCol = Math.max(0, Math.min(2, currentCol + dir));
-  claw.style.left = columns[currentCol] + "px";
+  clawIndex = Math.max(0, Math.min(cluster.length - 1, clawIndex + dir));
+  updateClaw();
 }
 
-/* GRAB LOGIC */
+function updateClaw(){
+  const target = cluster[clawIndex];
+  if(!target || target.classList.contains("hidden")) return;
+  claw.style.left = target.style.left;
+}
+
+/* GRAB */
 function grab(){
   if(busy) return;
-  const colStack = grid[currentCol];
-  if(colStack.length === 0) return;
+  const prize = cluster[clawIndex];
+  if(!prize || prize.classList.contains("hidden")) return;
 
   busy = true;
-  const prize = colStack.pop();
-  const targetY = prize.style.bottom;
-
-  claw.style.top = "calc(100% - " + targetY + ")";
+  claw.style.top = "160px";
 
   setTimeout(() => {
     prize.classList.add("hidden");
@@ -287,7 +292,7 @@ function grab(){
 
     if(score === prizes.length){
       nextBtn.style.display = "block";
-      setTimeout(() => final.style.display = "flex", 800);
+      setTimeout(()=>final.style.display="flex",800);
     }
 
     claw.style.top = "10px";
