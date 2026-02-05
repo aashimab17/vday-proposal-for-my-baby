@@ -12,7 +12,7 @@ body {
   margin: 0;
   height: 100vh;
   font-family: 'Poppins', sans-serif;
-  background: radial-gradient(circle at top, #b3002d, #5a0016);
+  background: radial-gradient(circle at top, #b3002d, #4a0012);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,33 +20,33 @@ body {
   color: #4a1f2c;
 }
 
-/* BACKGROUND FLOATERS */
+/* ===== FLOATING HEART BACKGROUND ===== */
 .bg {
   position: fixed;
   inset: 0;
-  overflow: hidden;
   z-index: 0;
+  overflow: hidden;
 }
 
 .heart {
   position: absolute;
-  color: rgba(255,255,255,0.25);
   animation: floatUp linear infinite;
+  opacity: 0;
 }
 
 @keyframes floatUp {
-  from {
+  0% {
     transform: translateY(110vh) scale(0.8);
     opacity: 0;
   }
-  20% { opacity: 1; }
-  to {
+  20% { opacity: 0.9; }
+  100% {
     transform: translateY(-10vh) scale(1.2);
     opacity: 0;
   }
 }
 
-/* CONFETTI */
+/* ===== CONFETTI ===== */
 .confetti {
   position: fixed;
   width: 8px;
@@ -63,8 +63,10 @@ body {
   }
 }
 
-/* CARD */
+/* ===== CARD ===== */
 .card {
+  position: relative;
+  z-index: 2;
   background: rgba(255,255,255,0.55);
   backdrop-filter: blur(16px);
   padding: 50px;
@@ -74,8 +76,6 @@ body {
   width: 90%;
   box-shadow: 0 40px 100px rgba(0,0,0,0.35);
   animation: fadeIn 0.8s ease;
-  position: relative;
-  z-index: 2;
 }
 
 @keyframes fadeIn {
@@ -91,6 +91,7 @@ p {
   margin-bottom: 36px;
 }
 
+/* ===== BUTTONS ===== */
 .buttons {
   position: relative;
   height: 90px;
@@ -116,8 +117,10 @@ button {
   color: #ff4d6d;
   border: 2px solid #ff4d6d;
   z-index: 3;
+  transition: left 0.25s ease, top 0.25s ease;
 }
 
+/* ===== RESULT ===== */
 .result {
   display: none;
   animation: pop 0.6s ease;
@@ -135,11 +138,11 @@ button {
 <!-- BACKGROUND -->
 <div class="bg" id="bg"></div>
 
+<!-- CARD -->
 <div class="card" id="card">
 
   <div id="textZone">
     <h1>So… 💕</h1>
-
     <p id="question">
       Will you be my Valentine? 💌<br>
       Like… officially. Properly. With feelings.
@@ -163,20 +166,23 @@ button {
 </div>
 
 <script>
-/* FLOATING HEARTS */
+/* ===== FLOATING HEARTS ===== */
 const bg = document.getElementById("bg");
-for (let i = 0; i < 40; i++) {
+const heartEmojis = ["💗","💖","💘","❤️","✨"];
+
+for (let i = 0; i < 45; i++) {
   const h = document.createElement("div");
   h.className = "heart";
-  h.textContent = ["💗","💖","💘","❤️","✨"][Math.floor(Math.random()*5)];
+  h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
   h.style.left = Math.random() * 100 + "vw";
-  h.style.animationDuration = 6 + Math.random()*6 + "s";
-  h.style.fontSize = 14 + Math.random()*20 + "px";
+  h.style.fontSize = 14 + Math.random() * 22 + "px";
+  h.style.animationDuration = 6 + Math.random() * 6 + "s";
   bg.appendChild(h);
 }
 
-/* NO BUTTON LOGIC — avoids text only */
+/* ===== NO BUTTON LOGIC ===== */
 const noBtn = document.getElementById("noBtn");
+const card = document.getElementById("card");
 const textZone = document.getElementById("textZone");
 const question = document.getElementById("question");
 
@@ -195,12 +201,28 @@ const texts = [
 function moveNo() {
   noCount++;
 
+  const cardRect = card.getBoundingClientRect();
   const textRect = textZone.getBoundingClientRect();
+
+  const padding = 40;
+
+  const minX = Math.max(0, cardRect.left - padding);
+  const maxX = Math.min(
+    window.innerWidth - noBtn.offsetWidth,
+    cardRect.right + padding - noBtn.offsetWidth
+  );
+
+  const minY = Math.max(0, cardRect.top - padding);
+  const maxY = Math.min(
+    window.innerHeight - noBtn.offsetHeight,
+    cardRect.bottom + padding - noBtn.offsetHeight
+  );
+
   let x, y;
 
   do {
-    x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    x = minX + Math.random() * (maxX - minX);
+    y = minY + Math.random() * (maxY - minY);
   } while (
     x < textRect.right &&
     x + noBtn.offsetWidth > textRect.left &&
@@ -211,17 +233,16 @@ function moveNo() {
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
 
-  question.textContent =
-    texts[Math.min(noCount - 1, texts.length - 1)];
+  question.textContent = texts[Math.min(noCount - 1, texts.length - 1)];
 }
 
-/* YES CONFETTI */
+/* ===== YES CONFETTI ===== */
 function sayYes() {
   document.querySelector(".buttons").style.display = "none";
-  question.style.display = "none";
+  document.getElementById("question").style.display = "none";
   document.getElementById("result").style.display = "block";
 
-  for (let i = 0; i < 140; i++) {
+  for (let i = 0; i < 150; i++) {
     const c = document.createElement("div");
     c.className = "confetti";
     c.style.left = Math.random() * 100 + "vw";
