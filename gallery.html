@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Our Little Moments 🍒</title>
+<title>Ugh. Look at us.</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -16,42 +16,69 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== GALLERY ===== */
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: 100vh;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero h1 {
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 28px;
+}
+
+/* ===== GALLERY (ONE SCREEN) ===== */
 .gallery {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  padding: 40px;
-  min-height: 100vh;
+  gap: 16px;
 }
 
 .gallery img {
   width: 100%;
-  height: 260px;
+  height: 100%;
   object-fit: cover;
   border-radius: 18px;
-  border: 2px solid rgba(255,255,255,0.85);
+  border: 2px solid rgba(255,255,255,0.9);
+  transition: opacity 0.6s ease;
+}
+
+/* ===== FADE STATE ===== */
+.fade .gallery img {
+  opacity: 0.25;
 }
 
 /* ===== GRADIENT TRANSITION ===== */
-.transition {
-  height: 140px;
+.gradient {
+  height: 160px;
   background: linear-gradient(
     to bottom,
     rgba(255,117,143,0),
-    rgba(0,0,0,0.45)
+    rgba(0,0,0,0.55)
   );
 }
 
 /* ===== TEXT SECTION ===== */
 .text-section {
   min-height: 100vh;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.6);
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 80px 20px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.8s ease;
+}
+
+.text-section.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .text-box {
@@ -60,7 +87,6 @@ body {
   padding: 55px 60px;
   border-radius: 32px;
   text-align: center;
-  box-shadow: 0 40px 90px rgba(0,0,0,0.45);
 }
 
 .text-box p {
@@ -69,6 +95,7 @@ body {
   margin-bottom: 22px;
 }
 
+/* ===== BUTTON ===== */
 .button {
   margin-top: 32px;
   padding: 14px 40px;
@@ -112,35 +139,35 @@ body {
 
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {
-  .gallery { grid-template-columns: repeat(2, 1fr); }
-  .gallery img { height: 220px; }
-  .text-box { padding: 40px 30px; }
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- GALLERY -->
-<div class="gallery">
-  <img src="assets/images/photo1.jpg">
-  <img src="assets/images/photo2.jpg">
-  <img src="assets/images/photo3.jpg">
-  <img src="assets/images/photo4.jpg">
-  <img src="assets/images/photo5.jpg">
-  <img src="assets/images/photo6.jpg">
-  <img src="assets/images/photo7.jpg">
-  <img src="assets/images/photo8.jpg">
-  <img src="assets/images/photo9.jpg">
-  <img src="assets/images/photo10.jpg">
-  <img src="assets/images/photo11.jpg">
-  <img src="assets/images/photo12.jpg">
-</div>
+<!-- HERO -->
+<section class="hero" id="hero">
+  <h1>Ugh. Look at us. Made for each other 💗</h1>
 
-<div class="transition"></div>
+  <div class="gallery">
+    <img src="assets/images/photo1.jpg">
+    <img src="assets/images/photo2.jpg">
+    <img src="assets/images/photo3.jpg">
+    <img src="assets/images/photo4.jpg">
+    <img src="assets/images/photo5.jpg">
+    <img src="assets/images/photo6.jpg">
+    <img src="assets/images/photo7.jpg">
+    <img src="assets/images/photo8.jpg">
+  </div>
+</section>
+
+<div class="gradient"></div>
 
 <!-- TEXT -->
-<div class="text-section">
+<section class="text-section" id="text">
   <div class="text-box">
     <p>
       I never really thought I deserved a happy ever after 🫶  
@@ -153,11 +180,6 @@ body {
     </p>
 
     <p>
-      You make me feel seen, safe, and deeply loved 🤍  
-      Even when you’re annoying. Especially then.
-    </p>
-
-    <p>
       You’re chaotic, stupid sometimes, and extremely unserious 🙄😂  
       But unfortunately… I love you 🥺💕
     </p>
@@ -166,7 +188,7 @@ body {
       Chal theek hai ab paka mat 😒👉
     </button>
   </div>
-</div>
+</section>
 
 <!-- POPUP -->
 <div class="popup" id="popup">
@@ -180,9 +202,20 @@ body {
 </div>
 
 <script>
+const hero = document.getElementById("hero");
+const text = document.getElementById("text");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 50) {
+    hero.classList.add("fade");
+    text.classList.add("show");
+  }
+});
+
 function showPopup() {
   document.getElementById("popup").style.display = "flex";
 }
+
 function goGame() {
   window.location.href = "game.html";
 }
