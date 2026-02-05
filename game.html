@@ -66,21 +66,23 @@ h1 {
   z-index: 5;
 }
 
-/* PRIZE GRID */
+/* PRIZES — EXACTLY 2 ROWS */
 .cluster {
   position: absolute;
   bottom: 14px;
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
   padding: 0 18px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 12px;
 }
 
+/* PRIZE BOX */
 .prize {
   background: linear-gradient(135deg, #ffb6c1, #ff5c8a);
   border-radius: 12px;
-  height: 54px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
