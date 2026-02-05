@@ -19,6 +19,20 @@ body {
   align-items: center;
 }
 
+/* TOP TITLE */
+.arcade-title {
+  position: fixed;
+  top: 18px;
+  width: 100%;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  font-size: 2.1rem;
+  letter-spacing: 3px;
+  color: #ffd6dc;
+  text-shadow: 0 0 14px rgba(255,182,193,0.9);
+  z-index: 5;
+}
+
 /* FLOATING HEARTS */
 .heart {
   position: absolute;
@@ -30,7 +44,7 @@ body {
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* GAME CARD */
+/* ARCADE */
 .arcade {
   width: 360px;
   background: linear-gradient(#a4142e, #6b0f1f);
@@ -40,10 +54,12 @@ body {
   z-index: 2;
 }
 
-h1 {
+/* SCORE */
+.score {
   text-align: center;
-  color: #ffd6dc;
-  margin: 6px 0 10px;
+  color: #ffe6eb;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 /* WINDOW */
@@ -66,6 +82,16 @@ h1 {
   z-index: 3;
 }
 
+.claw.bonus {
+  animation: shake 0.3s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translateX(-50%) rotate(-8deg); }
+  50% { transform: translateX(-50%) rotate(8deg); }
+  100% { transform: translateX(-50%) rotate(-8deg); }
+}
+
 /* PRIZES */
 .cluster {
   position: absolute;
@@ -78,20 +104,33 @@ h1 {
 }
 
 .prize {
-  font-size: 1.8rem;
-  transition: transform 0.4s, opacity 0.4s;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, #ff9eb5, #ff4d6d);
+  box-shadow: 0 10px 20px rgba(255,77,109,0.4);
+  animation: popIn 0.6s ease forwards;
+}
+
+@keyframes popIn {
+  from { transform: scale(0) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 .prize.hidden {
   opacity: 0;
   transform: scale(0);
+  transition: 0.4s;
 }
 
 /* CONTROLS */
 .controls {
   margin-top: 12px;
   display: flex;
-  justify-content: space-between;
   gap: 6px;
 }
 
@@ -107,14 +146,6 @@ h1 {
 .left { background: #ffd6dc; }
 .grab { background: #f6c445; }
 .right { background: #ffd6dc; }
-
-.next {
-  display: none;
-  margin-top: 10px;
-  width: 100%;
-  background: #ff4d6d;
-  color: white;
-}
 
 /* POPUP */
 .popup {
@@ -133,10 +164,57 @@ h1 {
   border-radius: 20px;
   text-align: center;
 }
+
+/* FINAL SCREEN */
+.final {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #ff4d6d, #5c0f1b);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  color: white;
+  text-align: center;
+}
+
+.final h1 {
+  font-size: 2.4rem;
+  margin-bottom: 20px;
+}
+
+.final button {
+  padding: 14px 40px;
+  border-radius: 40px;
+  border: none;
+  font-size: 1.1rem;
+  background: white;
+  color: #ff4d6d;
+  cursor: pointer;
+}
+
+/* CONFETTI */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 14px;
+  top: -20px;
+  animation: fall linear forwards;
+  z-index: 20;
+}
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
 </style>
 </head>
 
 <body>
+
+<div class="arcade-title">Ujwal’s Arcade</div>
 
 <script>
 for (let i = 0; i < 30; i++) {
@@ -151,7 +229,7 @@ for (let i = 0; i < 30; i++) {
 </script>
 
 <div class="arcade">
-  <h1>💗 LOVE CLAW 💗</h1>
+  <div class="score">Score: <span id="score">0</span></div>
 
   <div class="window">
     <div class="claw" id="claw">🕹️</div>
@@ -163,11 +241,6 @@ for (let i = 0; i < 30; i++) {
     <button class="grab" onclick="grab()">GRAB 💘</button>
     <button class="right" onclick="moveClaw(40)">➡️</button>
   </div>
-
-  <button class="next" id="nextBtn"
-    onclick="window.location.href='/vday-proposal-for-my-baby/bucket.html'">
-    Next 💗
-  </button>
 </div>
 
 <div class="popup" id="popup">
@@ -175,6 +248,11 @@ for (let i = 0; i < 30; i++) {
     <p id="popupText"></p>
     <button onclick="closePopup()">OKAY 😌</button>
   </div>
+</div>
+
+<div class="final" id="final">
+  <h1>You won my heart 💗</h1>
+  <button onclick="location.href='bucket.html'">Next 💖</button>
 </div>
 
 <script>
@@ -194,11 +272,13 @@ const cluster = document.getElementById("cluster");
 const claw = document.getElementById("claw");
 const popup = document.getElementById("popup");
 const popupText = document.getElementById("popupText");
-const nextBtn = document.getElementById("nextBtn");
+const final = document.getElementById("final");
+const scoreEl = document.getElementById("score");
 
 let clawX = 50;
 let index = 0;
 let busy = false;
+let score = 0;
 
 prizes.forEach(p => {
   const d = document.createElement("div");
@@ -224,6 +304,8 @@ function grab() {
     popupText.textContent = prizes[index].text;
     popup.style.display = "flex";
     prizeEls[index].classList.add("hidden");
+    score++;
+    scoreEl.textContent = score;
   }, 500);
 }
 
@@ -234,7 +316,29 @@ function closePopup() {
   busy = false;
 
   if (index === prizeEls.length) {
-    nextBtn.style.display = "block";
+    startBonus();
+  }
+}
+
+function startBonus() {
+  claw.classList.add("bonus");
+  setTimeout(() => {
+    claw.classList.remove("bonus");
+    showFinal();
+  }, 2000);
+}
+
+function showFinal() {
+  final.style.display = "flex";
+  for (let i = 0; i < 140; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background =
+      ["#ff4d6d","#ffd1dc","#ffffff","#ff9a9e"][Math.floor(Math.random()*4)];
+    c.style.animationDuration = 2 + Math.random()*2 + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
   }
 }
 </script>
