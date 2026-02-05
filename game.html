@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Claw Machine 💗</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Love Arcade 💗</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -11,129 +11,126 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  overflow: hidden;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  animation: bgPulse 8s ease-in-out infinite;
-}
-
-@keyframes bgPulse {
-  0%,100% { filter: brightness(1); }
-  50% { filter: brightness(1.08); }
-}
-
-/* FLOATING HEARTS */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  font-size: 1.2rem;
-  opacity: 0.4;
-  animation: floatUp linear infinite;
-}
-
-@keyframes floatUp {
-  to {
-    transform: translateY(-110vh);
-    opacity: 0;
-  }
-}
-
-/* MODAL */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 105, 135, 0.4);
-  backdrop-filter: blur(8px);
+  background: #7b1d2a;
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 10;
+  align-items: center;
+  min-height: 100vh;
+  color: #fff;
 }
 
-.modal-box {
-  background: rgba(255,255,255,0.35);
-  padding: 36px;
-  border-radius: 26px;
+/* ARCADE CABINET */
+.arcade {
+  width: 360px;
+  background: linear-gradient(#b71c2a, #7b1d2a);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  padding: 16px;
   text-align: center;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.25);
 }
 
-.modal-box button {
-  margin-top: 24px;
-  padding: 12px 36px;
-  border: none;
-  border-radius: 30px;
-  background: #ff4d6d;
-  color: white;
-  cursor: pointer;
+/* HEADER */
+.header {
+  background: #8c1d2c;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
-/* GAME */
-.game {
+.header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.header small {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* GAME WINDOW */
+.window {
+  background: #fff;
+  color: #4a1f2c;
+  height: 260px;
+  border-radius: 12px;
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  overflow: hidden;
+  margin: 12px 0;
 }
 
 /* CLAW */
 .claw {
   position: absolute;
-  top: 20px;
+  top: 0;
   left: 50%;
-  font-size: 3rem;
   transform: translateX(-50%);
-  transition: left 0.1s linear;
-  z-index: 5;
+  font-size: 2rem;
+  transition: left 0.2s ease;
 }
 
 .string {
   position: absolute;
-  top: 0;
+  top: 20px;
   left: 50%;
-  width: 4px;
+  width: 3px;
   height: 0;
-  background: rgba(255,255,255,0.8);
+  background: #ccc;
   transform: translateX(-50%);
 }
 
 /* PRIZE */
 .prize {
   position: absolute;
-  bottom: 60px;
-  font-size: 2.6rem;
-  animation: wiggle 2s ease-in-out infinite;
+  bottom: 20px;
+  font-size: 2rem;
 }
 
-@keyframes wiggle {
-  0%,100% { transform: rotate(0deg); }
-  50% { transform: rotate(6deg); }
+/* CONTROLS */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.controls button {
+  flex: 1;
+  margin: 0 4px;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  background: #f4c430;
+  color: #7b1d2a;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 /* POPUP */
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(255,105,135,0.5);
-  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 20;
+  z-index: 10;
 }
 
 .popup-box {
-  background: rgba(255,255,255,0.4);
-  padding: 32px;
-  border-radius: 26px;
+  background: #fff;
+  color: #4a1f2c;
+  padding: 24px;
+  border-radius: 20px;
+  width: 280px;
   text-align: center;
 }
 
 .popup-box button {
-  margin-top: 22px;
-  padding: 10px 28px;
+  margin-top: 16px;
+  padding: 10px 24px;
+  border-radius: 20px;
   border: none;
-  border-radius: 28px;
   background: #ff4d6d;
-  color: white;
+  color: #fff;
   cursor: pointer;
 }
 </style>
@@ -141,104 +138,88 @@ body {
 
 <body>
 
-<!-- INSTRUCTIONS -->
-<div class="modal" id="instructions">
-  <div class="modal-box">
-    <h2>Claw Machine 💕</h2>
-    <p>
-      Move the claw left & right.<br><br>
-      Click or press <b>SPACE</b> to drop it 🤏<br><br>
-      Collect all 5 prizes 💝
-    </p>
-    <button onclick="startGame()">Insert Coin 💖</button>
+<div class="arcade">
+  <div class="header">
+    <h1>💖 LOVE ARCADE 💖</h1>
+    <small>Try your luck, baby 😌</small>
+  </div>
+
+  <div class="window" id="window">
+    <div class="claw" id="claw">🤖</div>
+    <div class="string" id="string"></div>
+  </div>
+
+  <div class="controls">
+    <button onclick="moveClaw(-40)">◀ LEFT</button>
+    <button onclick="dropClaw()">GRAB 💘</button>
+    <button onclick="moveClaw(40)">RIGHT ▶</button>
   </div>
 </div>
 
-<div class="game" id="game">
-  <div class="string" id="string"></div>
-  <div class="claw" id="claw">🤖</div>
-</div>
-
 <script>
-/* FLOATING HEARTS */
-setInterval(() => {
-  const h = document.createElement("div");
-  h.className = "heart";
-  h.textContent = "💗";
-  h.style.left = Math.random() * 100 + "vw";
-  h.style.animationDuration = 6 + Math.random() * 4 + "s";
-  document.body.appendChild(h);
-  setTimeout(() => h.remove(), 10000);
-}, 600);
-
-/* GAME LOGIC */
-const game = document.getElementById("game");
+const windowEl = document.getElementById("window");
 const claw = document.getElementById("claw");
 const string = document.getElementById("string");
 
+let clawX = windowEl.offsetWidth / 2;
 let dropping = false;
-let collected = 0;
 
-const gifts = [
-  { emoji: "🍳", text: "One homemade meal by baby 👩‍🍳💕" },
-  { emoji: "☕", text: "Morning coffee in bed privileges for life ☕😌" },
-  { emoji: "❤️", text: "I will flash you anytime you want 😌🔥" },
-  { emoji: "👶", text: "I will keep your inner child alive forever 🤪🧸" },
-  { emoji: "😘", text: "If you kiss me during an argument, it ends there 😤💋" }
+/* YOUR PRIZES — UNTOUCHED CONTENT */
+const prizes = [
+  { emoji: "📷", text: "Starting today, I will post on Instagram regularly 📸💗" },
+  { emoji: "🍕", text: "For 30 days, I will not touch junk food 😤🍕" },
+  { emoji: "✍️", text: "You can redeem one sweet paragraph with your praises when you are down 💌" },
+  { emoji: "💍", text: "Redeem a lifetime of happiness with me. Kalesh complimentary 😌💍" },
+
+  { emoji: "💋", text: "Unlimited kisses voucher 💋" },
+  { emoji: "💗", text: "Lifetime cuddles subscription activated 🥰" },
+  { emoji: "☕", text: "Coffee dates on demand ☕😌" },
+  { emoji: "🧸", text: "Inner child protection & care plan 🤪🧸" },
+  { emoji: "🍳", text: "Homemade meals by baby 👩‍🍳💕" }
 ];
 
-document.addEventListener("mousemove", e => {
-  if (!dropping) {
-    claw.style.left = e.clientX + "px";
-    string.style.left = e.clientX + "px";
-  }
-});
-
-document.addEventListener("click", dropClaw);
-document.addEventListener("keydown", e => {
-  if (e.code === "Space") dropClaw();
-});
-
-function startGame() {
-  document.getElementById("instructions").style.display = "none";
-  spawnPrize();
-}
+let currentPrize = null;
 
 function spawnPrize() {
-  if (!gifts.length) return;
-  const prize = gifts.shift();
-  const el = document.createElement("div");
-  el.className = "prize";
-  el.textContent = prize.emoji;
-  el.dataset.text = prize.text;
-  el.style.left = Math.random() * 80 + "vw";
-  game.appendChild(el);
+  if (!prizes.length) return;
+  const data = prizes.shift();
+  const p = document.createElement("div");
+  p.className = "prize";
+  p.textContent = data.emoji;
+  p.dataset.text = data.text;
+  p.style.left = Math.random() * 80 + "%";
+  windowEl.appendChild(p);
+  currentPrize = p;
+}
+
+spawnPrize();
+
+function moveClaw(delta) {
+  if (dropping) return;
+  clawX = Math.max(20, Math.min(windowEl.offsetWidth - 20, clawX + delta));
+  claw.style.left = clawX + "px";
+  string.style.left = clawX + "px";
 }
 
 function dropClaw() {
-  if (dropping) return;
-  const prize = document.querySelector(".prize");
-  if (!prize) return;
-
+  if (dropping || !currentPrize) return;
   dropping = true;
-  let down = 20;
+  let height = 0;
 
   const fall = setInterval(() => {
-    down += 10;
-    claw.style.top = down + "px";
-    string.style.height = down + "px";
+    height += 10;
+    string.style.height = height + "px";
 
-    const c = claw.getBoundingClientRect();
-    const p = prize.getBoundingClientRect();
+    const clawRect = claw.getBoundingClientRect();
+    const prizeRect = currentPrize.getBoundingClientRect();
 
-    if (c.bottom >= p.top && c.left < p.right && c.right > p.left) {
+    if (clawRect.bottom >= prizeRect.top) {
       clearInterval(fall);
-      prize.remove();
-      collected++;
-      showGift(prize.dataset.text);
+      currentPrize.remove();
+      showPopup(currentPrize.dataset.text);
     }
 
-    if (down > window.innerHeight - 120) {
+    if (height > 200) {
       clearInterval(fall);
       resetClaw();
     }
@@ -246,29 +227,31 @@ function dropClaw() {
 }
 
 function resetClaw() {
-  claw.style.top = "20px";
   string.style.height = "0";
   dropping = false;
 }
 
-function showGift(text) {
+function showPopup(text) {
   const pop = document.createElement("div");
   pop.className = "popup";
   pop.innerHTML = `
     <div class="popup-box">
       <p>${text}</p>
-      ${
-        collected === 5
-          ? `<button onclick="location.href='/vday-proposal-for-my-baby/bucket.html'">
-              That was cute, what next? 😌
-            </button>`
-          : `<button onclick="this.closest('.popup').remove(); resetClaw(); spawnPrize();">
-              Keep playing 🎮
-            </button>`
-      }
+      <button onclick="nextPrize(this)">Continue 😌</button>
     </div>
   `;
   document.body.appendChild(pop);
+}
+
+function nextPrize(btn) {
+  btn.closest(".popup").remove();
+  resetClaw();
+
+  if (prizes.length) {
+    spawnPrize();
+  } else {
+    window.location.href = "/vday-proposal-for-my-baby/bucket.html";
+  }
 }
 </script>
 
