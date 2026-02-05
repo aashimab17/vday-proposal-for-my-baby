@@ -6,128 +6,126 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-  margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: #b11226;
+  background: #8b0015; /* cherry red */
   color: white;
   overflow-x: hidden;
 }
 
-/* SCROLL SPACE */
-.wrapper {
-  height: 200vh;
-  position: relative;
-}
-
-/* ===== IMAGE GRID ===== */
-.images {
+/* ===== HERO SECTION ===== */
+.hero {
   position: sticky;
   top: 0;
   height: 100vh;
-  padding: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   z-index: 1;
-  transition: opacity 0.4s ease;
 }
 
-h1 {
+.hero h1 {
   text-align: center;
-  margin: 8px 0 14px;
   font-size: 1.7rem;
+  margin-bottom: 10px;
 }
 
+/* ===== IMAGE GRID ===== */
 .grid {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
 
 .grid img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* ✅ CROPPED 4:4 */
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.9);
 }
 
-/* ===== GRADIENT ===== */
+/* ===== GRADIENT OVERLAY ===== */
 .gradient {
   position: fixed;
   inset: 0;
   background: linear-gradient(
-    rgba(0,0,0,0) 20%,
-    rgba(0,0,0,0.55) 55%,
-    rgba(0,0,0,0.75) 100%
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.6) 30%,
+    rgba(0,0,0,0.85) 60%,
+    rgba(0,0,0,0.95) 100%
   );
   opacity: 0;
+  transition: opacity 0.5s ease;
   z-index: 2;
   pointer-events: none;
-  transition: opacity 0.4s ease;
 }
 
-/* ===== TEXT ===== */
-.text-layer {
+/* ===== TEXT CONTENT ===== */
+.text {
   position: fixed;
   inset: 0;
-  z-index: 3; /* ABOVE GRADIENT */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  pointer-events: none;
+  padding: 22px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 3;
+  text-align: center;
 }
 
 .text-box {
-  max-width: 720px;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.text-box.show {
-  opacity: 1;
-  transform: translateY(0);
+  max-width: 760px;
+  line-height: 1.7;
+  text-shadow: 0 4px 25px rgba(0,0,0,0.9);
 }
 
 .text-box p {
-  font-size: 1.05rem;
-  line-height: 1.8;
   margin-bottom: 18px;
+  font-size: 1.05rem;
 }
 
 .caption {
+  margin-top: 22px;
   font-size: 0.9rem;
-  opacity: 0.85;
-  margin-top: 16px;
+  color: #ffb6c1;
 }
 
-button {
-  margin-top: 26px;
+.next-btn {
+  display: inline-block;
+  margin-top: 30px;
   padding: 14px 36px;
-  border-radius: 30px;
-  border: none;
   background: #ff4d6d;
   color: white;
+  text-decoration: none;
+  border-radius: 40px;
   font-size: 1rem;
-  cursor: pointer;
-  pointer-events: auto;
 }
 
-/* MOBILE */
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
+    gap: 6px;
   }
 
-  h1 {
-    font-size: 1.5rem;
+  .hero h1 {
+    font-size: 1.4rem;
+  }
+
+  .text-box p {
+    font-size: 0.98rem;
   }
 }
 </style>
@@ -135,90 +133,66 @@ button {
 
 <body>
 
-<div class="wrapper">
+<!-- HERO -->
+<section class="hero">
+  <h1>Ugh. Look at us. Made for each other 💗</h1>
 
-  <!-- IMAGES -->
-  <div class="images" id="images">
-    <h1>Ugh. Look at us. Made for each other 💗</h1>
-
-    <div class="grid">
-      <img src="assets/images/photo1.jpg">
-      <img src="assets/images/photo2.jpg">
-      <img src="assets/images/photo3.jpg">
-      <img src="assets/images/photo4.jpg">
-      <img src="assets/images/photo5.jpg">
-      <img src="assets/images/photo6.jpg">
-      <img src="assets/images/photo7.jpg">
-      <img src="assets/images/photo8.jpg">
-      <img src="assets/images/photo9.jpg">
-      <img src="assets/images/photo10.jpg">
-      <img src="assets/images/photo11.jpg">
-      <img src="assets/images/photo12.jpg">
-    </div>
+  <div class="grid">
+    <img src="assets/images/photo1.jpg">
+    <img src="assets/images/photo2.jpg">
+    <img src="assets/images/photo3.jpg">
+    <img src="assets/images/photo4.jpg">
+    <img src="assets/images/photo5.jpg">
+    <img src="assets/images/photo6.jpg">
+    <img src="assets/images/photo7.jpg">
+    <img src="assets/images/photo8.jpg">
+    <img src="assets/images/photo9.jpg">
+    <img src="assets/images/photo10.jpg">
+    <img src="assets/images/photo11.jpg">
+    <img src="assets/images/photo12.jpg">
   </div>
+</section>
 
-  <!-- GRADIENT -->
-  <div class="gradient" id="gradient"></div>
+<!-- GRADIENT -->
+<div class="gradient" id="gradient"></div>
 
-  <!-- TEXT -->
-  <div class="text-layer">
-    <div class="text-box" id="textBox">
+<!-- TEXT -->
+<div class="text" id="text">
+  <div class="text-box">
+    <p>I never really thought of myself as someone who deserved a happy ever after 🫶 Love always felt like something that happened to other people, not me.</p>
 
-      <p>
-        I never really thought of myself as someone who deserved a happy ever after 🫶  
-        Love always felt like something that happened to other people, not me.
-      </p>
+    <p>But somehow, you made me believe again ✨ You made love feel real and possible, like it could actually happen for me too 💖</p>
 
-      <p>
-        But somehow, you made me believe again ✨  
-        You made love feel real and possible, like it could actually happen for me too 💖
-      </p>
+    <p>You make me a better person without even trying. And sometimes, you try very hard. I see that, too. You make me feel seen, safe, and loved in ways I never expected 🤍</p>
 
-      <p>
-        You make me a better person without even trying. And sometimes, you try very hard. I see that, too.  
-        You make me feel seen, safe, and loved in ways I never expected 🤍
-      </p>
+    <p>And yes, you can be absolutely crazy, a little unhinged, and sometimes very stupid 🙄😂 But somehow, that just makes me love you even more 🥺💕</p>
 
-      <p>
-        And yes, you can be absolutely crazy, a little unhinged, and sometimes very stupid 🙄😂  
-        But somehow, that just makes me love you even more 🥺💕
-      </p>
+    <div class="caption">Some things feel better when they’re discovered slowly 💗</div>
 
-      <div class="caption">
-        Some things feel better when they’re discovered slowly 💗
-      </div>
-
-      <button onclick="goNext()">Chal theek hai ab paka mat 😒</button>
-    </div>
+    <a href="game.html" class="next-btn">
+      Chal theek hai ab paka mat 😒👉
+    </a>
   </div>
-
 </div>
 
 <script>
-const gradient = document.getElementById("gradient");
-const textBox = document.getElementById("textBox");
-const images = document.getElementById("images");
-
 window.addEventListener("scroll", () => {
-  const scrollY = window.scrollY;
-  const trigger = window.innerHeight * 0.3;
+  const y = window.scrollY;
+  const gradient = document.getElementById("gradient");
+  const text = document.getElementById("text");
 
-  if (scrollY > trigger) {
-    gradient.style.opacity = 1;
-    textBox.classList.add("show");
-    images.style.opacity = 0.35;
+  if (y > 40) {
+    gradient.style.opacity = "1";
+    text.style.opacity = "1";
   } else {
-    gradient.style.opacity = 0;
-    textBox.classList.remove("show");
-    images.style.opacity = 1;
+    gradient.style.opacity = "0";
+    text.style.opacity = "0";
   }
 });
-
-function goNext() {
-  alert("Okay theek hai games khel lete hain, pyar nahi chaiye toh :)");
-  window.location.href = "game.html";
-}
 </script>
+
+<!-- SCROLL SPACE -->
+<div style="height:120vh;"></div>
 
 </body>
 </html>
