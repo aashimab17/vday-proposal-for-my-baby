@@ -1,220 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Ugh. Look at us.</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Ugh. Look at us.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-* { box-sizing: border-box; }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: #8b0d2e;
-  color: white;
-  overflow-x: hidden;
-}
+    body {
+      margin: 0;
+      height: 200vh; /* needed for scroll */
+      background: #8b0015; /* cherry red */
+      font-family: 'Poppins', sans-serif;
+      color: white;
+    }
 
-/* ===== MAIN WRAPPER ===== */
-.section {
-  min-height: 100vh;
-  position: relative;
-  padding: 40px;
-}
+    /* ===== FIXED HERO SECTION ===== */
+    .hero {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-/* ===== HEADING ===== */
-h1 {
-  text-align: center;
-  font-weight: 500;
-  margin-bottom: 28px;
-  z-index: 2;
-  position: relative;
-}
+    h1 {
+      margin: 0 0 20px;
+      font-size: 2rem;
+      font-weight: 600;
+      text-align: center;
+    }
 
-/* ===== GALLERY ===== */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
+    /* ===== IMAGE GRID ===== */
+    .gallery {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      transition: opacity 1s ease;
+    }
 
-.gallery img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 18px;
-  border: 2px solid rgba(255,255,255,0.9);
-  transition: opacity 0.6s ease;
-}
+    .gallery img {
+      width: 100%;
+      height: 22vh;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 2px solid rgba(255,255,255,0.85);
+    }
 
-/* ===== FADE IMAGES ===== */
-.fade .gallery img {
-  opacity: 0.25;
-}
+    /* ===== GRADIENT + TEXT OVERLAY ===== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(
+        rgba(0,0,0,0.05),
+        rgba(0,0,0,0.55)
+      );
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
 
-/* ===== OVERLAY GRADIENT + TEXT ===== */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.15),
-    rgba(0,0,0,0.65)
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
-  z-index: 5;
-}
+    .text-box {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
 
-.overlay.show {
-  opacity: 1;
-  pointer-events: auto;
-}
+    .text-inner {
+      max-width: 760px;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      padding: 50px 55px;
+      border-radius: 28px;
+      text-align: center;
+    }
 
-/* ===== TEXT BOX ===== */
-.text-box {
-  max-width: 760px;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(10px);
-  padding: 55px 60px;
-  border-radius: 32px;
-  text-align: center;
-  transform: translateY(40px);
-  opacity: 0;
-  transition: 0.8s ease;
-}
+    .text-inner p {
+      font-size: 1.15rem;
+      line-height: 2;
+      margin-bottom: 22px;
+    }
 
-.overlay.show .text-box {
-  transform: translateY(0);
-  opacity: 1;
-}
+    .caption {
+      margin-top: 26px;
+      font-size: 0.9rem;
+      color: #ffb6c1;
+    }
 
-.text-box p {
-  font-size: 1.15rem;
-  line-height: 2;
-  margin-bottom: 22px;
-}
+    /* ===== BUTTON ===== */
+    .next-btn {
+      display: inline-block;
+      margin-top: 34px;
+      padding: 14px 36px;
+      background: #ff4d6d;
+      color: white;
+      text-decoration: none;
+      border-radius: 40px;
+      font-size: 1rem;
+    }
 
-/* ===== BUTTON ===== */
-button {
-  margin-top: 32px;
-  padding: 14px 40px;
-  border-radius: 40px;
-  background: #ff4d6d;
-  border: none;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-}
+    /* ===== SCROLL EFFECT ===== */
+    body.scrolled .gallery {
+      opacity: 0.25;
+    }
 
-/* ===== POPUP ===== */
-.popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
+    body.scrolled .overlay {
+      opacity: 1;
+    }
 
-.popup-box {
-  background: white;
-  color: #4a1f2c;
-  padding: 30px 36px;
-  border-radius: 26px;
-  text-align: center;
-}
+    body.scrolled .text-box {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-.popup-box button {
-  margin-top: 18px;
-}
+    /* ===== MOBILE ===== */
+    @media (max-width: 768px) {
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-/* ===== MOBILE ===== */
-@media (max-width: 900px) {
-  .gallery {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-</style>
+      .gallery img {
+        height: 18vh;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<section class="section" id="section">
-  <h1>Ugh. Look at us. Made for each other 💗</h1>
+  <div class="hero">
+    <h1>Ugh. Look at us. Made for each other</h1>
 
-  <div class="gallery">
-    <img src="assets/images/photo1.jpg">
-    <img src="assets/images/photo2.jpg">
-    <img src="assets/images/photo3.jpg">
-    <img src="assets/images/photo4.jpg">
-    <img src="assets/images/photo5.jpg">
-    <img src="assets/images/photo6.jpg">
-    <img src="assets/images/photo7.jpg">
-    <img src="assets/images/photo8.jpg">
+    <div class="gallery">
+      <img src="assets/images/photo1.jpg">
+      <img src="assets/images/photo2.jpg">
+      <img src="assets/images/photo3.jpg">
+      <img src="assets/images/photo4.jpg">
+      <img src="assets/images/photo5.jpg">
+      <img src="assets/images/photo6.jpg">
+      <img src="assets/images/photo7.jpg">
+      <img src="assets/images/photo8.jpg">
+    </div>
   </div>
-</section>
 
-<!-- OVERLAY TEXT -->
-<div class="overlay" id="overlay">
+  <div class="overlay"></div>
+
   <div class="text-box">
-    <p>
-      I never really thought I deserved a happy ever after 🫶  
-      Love always felt like something meant for other people.
-    </p>
+    <div class="text-inner">
 
-    <p>
-      And then you happened ✨  
-      Loud. Annoying. Soft. Safe. Mine 💖
-    </p>
+      <!-- YOUR TEXT – UNTOUCHED -->
+      <p> I never really thought of myself as someone who deserved a happy ever after 🫶 Love always felt like something that happened to other people, not me. </p>
+      <p> But somehow, you made me believe again ✨ You made love feel real and possible, like it could actually happen for me too 💖 </p>
+      <p> You make me a better person without even trying. And sometimes, you try very hard. I see that, too. You make me feel seen, safe, and loved in ways I never expected 🤍 </p>
+      <p> And yes, you can be absolutely crazy, a little unhinged, and sometimes very stupid 🙄😂 But somehow, that just makes me love you even more 🥺💕 </p>
+      <div class="caption"> Some things feel better when they’re discovered slowly 💗 </div>
 
-    <p>
-      Unfortunately for both of us…  
-      this is it now 🥺💕
-    </p>
+      <a href="game.html" class="next-btn">
+        Chal theek hai ab paka mat
+      </a>
 
-    <button onclick="showPopup()">
-      Chal theek hai ab paka mat 😒👉
-    </button>
+    </div>
   </div>
-</div>
 
-<!-- POPUP -->
-<div class="popup" id="popup">
-  <div class="popup-box">
-    <p>
-      okay theek hai games khel lete hain,  
-      pyar nahi chaiye toh :)
-    </p>
-    <button onclick="goGame()">Fine 😌</button>
-  </div>
-</div>
-
-<script>
-const section = document.getElementById("section");
-const overlay = document.getElementById("overlay");
-
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 80) {
-    section.classList.add("fade");
-    overlay.classList.add("show");
-  }
-});
-
-function showPopup() {
-  document.getElementById("popup").style.display = "flex";
-}
-
-function goGame() {
-  window.location.href = "game.html";
-}
-</script>
+  <script>
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 60) {
+        document.body.classList.add("scrolled");
+      }
+    });
+  </script>
 
 </body>
 </html>
