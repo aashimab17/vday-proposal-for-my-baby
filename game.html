@@ -12,25 +12,25 @@ body {
   margin: 0;
   height: 100vh;
   font-family: 'Poppins', sans-serif;
-  overflow: hidden;
   background: radial-gradient(circle at top, #c9183a, #5c0f1b);
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
-/* FLOATING HEARTS */
+/* FLOATING BACKGROUND */
 .heart {
   position: absolute;
   bottom: -40px;
+  opacity: 0.6;
   animation: floatUp linear infinite;
-  opacity: 0.7;
 }
 @keyframes floatUp {
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* GAME CARD */
+/* ARCADE */
 .arcade {
   width: 360px;
   background: linear-gradient(#a4142e, #6b0f1f);
@@ -49,7 +49,7 @@ h1 {
 /* WINDOW */
 .window {
   height: 260px;
-  background: white;
+  background: #fff;
   border-radius: 14px;
   position: relative;
   overflow: hidden;
@@ -62,37 +62,43 @@ h1 {
   left: 50%;
   transform: translateX(-50%);
   font-size: 2.2rem;
-  transition: top 0.4s ease, left 0.3s ease;
-  z-index: 3;
+  transition: top 0.35s ease, left 0.25s ease;
+  z-index: 5;
 }
 
-/* PRIZES */
+/* PRIZE GRID */
 .cluster {
   position: absolute;
-  bottom: 10px;
+  bottom: 14px;
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 0 18px;
 }
 
 .prize {
+  background: linear-gradient(135deg, #ffb6c1, #ff5c8a);
+  border-radius: 12px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.8rem;
-  transition: transform 0.4s, opacity 0.4s;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .prize.hidden {
   opacity: 0;
   transform: scale(0);
+  pointer-events: none;
 }
 
 /* CONTROLS */
 .controls {
   margin-top: 12px;
   display: flex;
-  justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
 }
 
 .controls button {
@@ -104,9 +110,8 @@ h1 {
   cursor: pointer;
 }
 
-.left { background: #ffd6dc; }
+.left, .right { background: #ffd6dc; }
 .grab { background: #f6c445; }
-.right { background: #ffd6dc; }
 
 .next {
   display: none;
@@ -114,6 +119,10 @@ h1 {
   width: 100%;
   background: #ff4d6d;
   color: white;
+  border-radius: 20px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
 }
 
 /* POPUP */
@@ -122,9 +131,9 @@ h1 {
   inset: 0;
   background: rgba(0,0,0,0.6);
   display: none;
-  justify-content: center;
   align-items: center;
-  z-index: 5;
+  justify-content: center;
+  z-index: 10;
 }
 
 .popup-box {
@@ -139,7 +148,7 @@ h1 {
 <body>
 
 <script>
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 28; i++) {
   const h = document.createElement("div");
   h.className = "heart";
   h.textContent = Math.random() > 0.5 ? "💖" : "✨";
@@ -159,9 +168,9 @@ for (let i = 0; i < 30; i++) {
   </div>
 
   <div class="controls">
-    <button class="left" onclick="moveClaw(-40)">⬅️</button>
+    <button class="left" onclick="moveClaw(-12)">⬅️</button>
     <button class="grab" onclick="grab()">GRAB 💘</button>
-    <button class="right" onclick="moveClaw(40)">➡️</button>
+    <button class="right" onclick="moveClaw(12)">➡️</button>
   </div>
 
   <button class="next" id="nextBtn"
@@ -197,47 +206,70 @@ const popupText = document.getElementById("popupText");
 const nextBtn = document.getElementById("nextBtn");
 
 let clawX = 50;
-let index = 0;
 let busy = false;
+let grabbed = 0;
 
+/* BUILD PRIZES */
 prizes.forEach(p => {
   const d = document.createElement("div");
   d.className = "prize";
   d.textContent = p.emoji;
+  d.dataset.text = p.text;
   cluster.appendChild(d);
 });
 
-const prizeEls = document.querySelectorAll(".prize");
-
 function moveClaw(dx) {
   if (busy) return;
-  clawX = Math.min(90, Math.max(10, clawX + dx/3));
+  clawX = Math.max(10, Math.min(90, clawX + dx));
   claw.style.left = clawX + "%";
 }
 
 function grab() {
-  if (busy || index >= prizeEls.length) return;
+  if (busy) return;
+
+  const available = [...document.querySelectorAll(".prize:not(.hidden)")];
+  if (!available.length) return;
+
   busy = true;
   claw.style.top = "150px";
 
   setTimeout(() => {
-    popupText.textContent = prizes[index].text;
-    popup.style.display = "flex";
-    prizeEls[index].classList.add("hidden");
-  }, 500);
+    const clawCenter =
+      claw.getBoundingClientRect().left +
+      claw.offsetWidth / 2;
+
+    let closest = null;
+    let minDist = Infinity;
+
+    available.forEach(p => {
+      const rect = p.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      const dist = Math.abs(center - clawCenter);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = p;
+      }
+    });
+
+    if (closest) {
+      closest.classList.add("hidden");
+      popupText.textContent = closest.dataset.text;
+      popup.style.display = "flex";
+      grabbed++;
+    }
+  }, 350);
 }
 
 function closePopup() {
   popup.style.display = "none";
   claw.style.top = "10px";
-  index++;
   busy = false;
 
-  if (index === prizeEls.length) {
+  if (grabbed === prizes.length) {
     nextBtn.style.display = "block";
   }
 }
 </script>
 
 </body>
-</html
+</html>
