@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Love Arcade 💗</title>
+<title>Love Claw 💗</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -13,61 +13,48 @@ body {
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   overflow: hidden;
+  background: radial-gradient(circle at top, #c9183a, #5c0f1b);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at top, #b3122f, #5c0f1b);
 }
 
-/* FLOATING HEARTS BACKGROUND */
+/* FLOATING HEARTS */
 .heart {
   position: absolute;
   bottom: -40px;
-  font-size: 20px;
   animation: floatUp linear infinite;
   opacity: 0.7;
 }
-
 @keyframes floatUp {
-  from { transform: translateY(0) scale(1); opacity: 0.8; }
-  to { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+  from { transform: translateY(0); opacity: 0.8; }
+  to { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* ARCADE */
+/* GAME CARD */
 .arcade {
-  position: relative;
   width: 360px;
   background: linear-gradient(#a4142e, #6b0f1f);
   border-radius: 22px;
   padding: 16px;
   box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  position: relative;
   z-index: 2;
 }
 
-/* HEADER */
-.header {
-  text-align: center;
+h1 {
   color: #ffd6dc;
+  text-align: center;
+  margin: 4px 0 10px;
 }
 
-.header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.header p {
-  margin: 4px 0 12px;
-  font-size: 0.85rem;
-}
-
-/* GAME WINDOW */
+/* WINDOW */
 .window {
   background: #fff;
-  height: 230px;
+  height: 260px;
   border-radius: 14px;
   position: relative;
   overflow: hidden;
-  margin-bottom: 14px;
 }
 
 /* CLAW */
@@ -76,41 +63,40 @@ body {
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 2rem;
-  transition: transform 0.3s ease;
+  font-size: 2.2rem;
+  transition: top 0.4s ease;
+  z-index: 3;
 }
 
 /* PRIZE CLUSTER */
-.prize-cluster {
+.cluster {
   position: absolute;
-  bottom: 14px;
+  bottom: 10px;
   width: 100%;
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 0 12px;
+  justify-content: center;
+  gap: 10px;
 }
 
 .prize {
   font-size: 1.8rem;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-.prize.redeemed {
+.prize.hidden {
   opacity: 0;
   transform: scale(0);
 }
 
 /* CONTROLS */
 .controls {
-  display: flex;
-  gap: 8px;
+  margin-top: 12px;
+  text-align: center;
 }
 
-.controls button {
-  flex: 1;
-  padding: 10px;
+button {
+  padding: 10px 30px;
   border-radius: 20px;
   border: none;
   background: #f6c445;
@@ -118,77 +104,131 @@ body {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* POPUP */
+.popup {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 26px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 80%;
+}
+
+.popup-content p {
+  font-size: 1.1rem;
+}
+
+.next-btn {
+  display: none;
+  margin-top: 12px;
+  background: #ff4d6d;
+  color: white;
+}
 </style>
 </head>
 
 <body>
 
-<!-- FLOATING HEARTS -->
 <script>
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < 28; i++) {
   const h = document.createElement("div");
   h.className = "heart";
   h.textContent = Math.random() > 0.5 ? "💖" : "✨";
   h.style.left = Math.random() * 100 + "vw";
-  h.style.animationDuration = 6 + Math.random() * 6 + "s";
   h.style.fontSize = 14 + Math.random() * 20 + "px";
+  h.style.animationDuration = 6 + Math.random() * 6 + "s";
   document.body.appendChild(h);
 }
 </script>
 
 <div class="arcade">
-  <div class="header">
-    <h1>💗 LOVE ARCADE 💗</h1>
-    <p>Redeem everything. No skipping 😌</p>
-  </div>
+  <h1>💗 LOVE CLAW 💗</h1>
 
   <div class="window">
-    <div class="claw" id="claw">🤖</div>
+    <div class="claw" id="claw">🕹️</div>
 
-    <div class="prize-cluster" id="cluster">
-      <div class="prize">📷</div>
-      <div class="prize">🍕</div>
-      <div class="prize">✍️</div>
-      <div class="prize">💍</div>
-      <div class="prize">💋</div>
-      <div class="prize">💗</div>
-      <div class="prize">☕</div>
-      <div class="prize">🧸</div>
-      <div class="prize">🍳</div>
-    </div>
+    <div class="cluster" id="cluster"></div>
   </div>
 
   <div class="controls">
-    <button onclick="wiggleClaw()">◀ LEFT</button>
-    <button onclick="redeem()">GRAB 💘</button>
-    <button onclick="wiggleClaw()">RIGHT ▶</button>
+    <button onclick="grabPrize()">GRAB 💘</button>
+    <button class="next-btn" id="nextBtn"
+      onclick="window.location.href='/vday-proposal-for-my-baby/bucket.html'">
+      Next 💗
+    </button>
+  </div>
+</div>
+
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <p id="popupText"></p>
+    <button onclick="closePopup()">OKAY 😌</button>
   </div>
 </div>
 
 <script>
-const claw = document.getElementById("claw");
-const prizes = document.querySelectorAll(".prize");
-let index = 0;
+const prizesData = [
+  { emoji:"📷", text:"Starting today, I will post on Instagram regularly 📸💗" },
+  { emoji:"🍕", text:"For 30 days, I will not touch junk food 🍕😤" },
+  { emoji:"✍️", text:"Redeem one sweet paragraph full of praises ✍️💞" },
+  { emoji:"💍", text:"Lifetime happiness with me. Kalesh complimentary 💍😌" },
+  { emoji:"💋", text:"Unlimited kisses voucher 💋" },
+  { emoji:"💗", text:"Lifetime cuddles subscription activated 🥰" },
+  { emoji:"☕", text:"Coffee dates on demand ☕😌" },
+  { emoji:"🧸", text:"Inner child protection & care plan 🤪🧸" },
+  { emoji:"🍳", text:"Homemade meals by baby 👩‍🍳💕" }
+];
 
-function wiggleClaw() {
-  claw.style.transform = "translateX(-50%) rotate(-15deg)";
+const cluster = document.getElementById("cluster");
+const claw = document.getElementById("claw");
+const popup = document.getElementById("popup");
+const popupText = document.getElementById("popupText");
+const nextBtn = document.getElementById("nextBtn");
+
+let current = 0;
+let grabbing = false;
+
+prizesData.forEach(p => {
+  const d = document.createElement("div");
+  d.className = "prize";
+  d.textContent = p.emoji;
+  cluster.appendChild(d);
+});
+
+const prizeEls = document.querySelectorAll(".prize");
+
+function grabPrize() {
+  if (grabbing || current >= prizeEls.length) return;
+  grabbing = true;
+
+  claw.style.top = "150px";
+
   setTimeout(() => {
-    claw.style.transform = "translateX(-50%) rotate(15deg)";
-  }, 150);
-  setTimeout(() => {
-    claw.style.transform = "translateX(-50%)";
-  }, 300);
+    popupText.textContent = prizesData[current].text;
+    popup.style.display = "flex";
+    prizeEls[current].classList.add("hidden");
+  }, 500);
 }
 
-function redeem() {
-  if (index >= prizes.length) {
-    window.location.href = "/vday-proposal-for-my-baby/bucket.html";
-    return;
-  }
+function closePopup() {
+  popup.style.display = "none";
+  claw.style.top = "10px";
+  current++;
+  grabbing = false;
 
-  prizes[index].classList.add("redeemed");
-  wiggleClaw();
-  index++;
+  if (current === prizeEls.length) {
+    nextBtn.style.display = "inline-block";
+  }
 }
 </script>
 
