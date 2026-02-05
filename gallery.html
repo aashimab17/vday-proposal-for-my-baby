@@ -6,53 +6,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: #8b0015; /* cherry red */
+  background: #8b0015;
   color: white;
   overflow-x: hidden;
 }
 
-/* ===== HEADING ===== */
+/* ===== HEADER ===== */
 header {
   text-align: center;
-  padding: 28px 20px 12px;
+  padding: 22px 16px 10px;
 }
 
 header h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
-/* ===== GALLERY SECTION ===== */
+/* ===== GALLERY WRAPPER ===== */
 .gallery-section {
   position: relative;
-  min-height: 100vh;
+  height: calc(100vh - 80px); /* KEY FIX */
+  overflow: hidden;
 }
 
+/* ===== GALLERY GRID ===== */
 .gallery {
+  height: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  padding: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 12px;
+  padding: 14px 16px;
   transition: opacity 0.8s ease;
 }
 
 .gallery img {
   width: 100%;
-  aspect-ratio: 9 / 16;
-  object-fit: cover;
-  border-radius: 16px;
-  border: 2px solid rgba(255,255,255,0.85);
+  height: 100%;
+  object-fit: contain; /* IMPORTANT */
+  background: #000;
+  border-radius: 14px;
+  border: 2px solid rgba(255,255,255,0.9);
 }
 
-/* ===== GRADIENT + TEXT ===== */
+/* ===== TEXT OVERLAY ===== */
 .text-overlay {
   position: absolute;
   inset: 0;
@@ -75,30 +76,32 @@ header h1 {
 .text-box {
   position: relative;
   max-width: 760px;
+  max-height: 85vh;
+  overflow-y: auto;
   background: rgba(0,0,0,0.45);
   backdrop-filter: blur(8px);
-  padding: 40px 36px;
+  padding: 36px 28px;
   border-radius: 26px;
   text-align: center;
   z-index: 2;
 }
 
 .text-box p {
-  font-size: 1.05rem;
-  line-height: 1.9;
+  font-size: 1rem;
+  line-height: 1.85;
   margin-bottom: 18px;
 }
 
 .caption {
-  margin-top: 22px;
+  margin-top: 20px;
   font-size: 0.9rem;
   color: #ffb6c1;
 }
 
 .next-btn {
   display: inline-block;
-  margin-top: 28px;
-  padding: 12px 34px;
+  margin-top: 26px;
+  padding: 12px 32px;
   background: #ff4d6d;
   color: white;
   text-decoration: none;
@@ -107,33 +110,18 @@ header h1 {
 }
 
 /* ===== SCROLL EFFECT ===== */
-.scrolled .gallery {
-  opacity: 0.15;
-}
-
-.scrolled .text-overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
+.scrolled .gallery { opacity: 0.15; }
+.scrolled .text-overlay { opacity: 1; pointer-events: auto; }
 
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
-  header h1 {
-    font-size: 1.4rem;
-  }
-
   .gallery {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
   }
 
-  .text-box {
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 30px 22px;
-  }
-
-  .text-box p {
-    font-size: 1rem;
+  header h1 {
+    font-size: 1.35rem;
   }
 }
 </style>
@@ -147,7 +135,6 @@ header h1 {
 
 <section class="gallery-section" id="gallerySection">
 
-  <!-- GALLERY -->
   <div class="gallery">
     <img src="assets/images/photo1.jpg">
     <img src="assets/images/photo2.jpg">
@@ -155,31 +142,31 @@ header h1 {
     <img src="assets/images/photo4.jpg">
     <img src="assets/images/photo5.jpg">
     <img src="assets/images/photo6.jpg">
+    <img src="assets/images/photo7.jpg">
+    <img src="assets/images/photo8.jpg">
+    <img src="assets/images/photo9.jpg">
+    <img src="assets/images/photo10.jpg">
+    <img src="assets/images/photo11.jpg">
+    <img src="assets/images/photo12.jpg">
   </div>
 
-  <!-- TEXT OVERLAY -->
   <div class="text-overlay">
     <div class="text-box">
 
       <p>
-        I never really thought of myself as someone who deserved a happy ever after 🫶  
         Love always felt like something that happened to other people, not me.
       </p>
 
       <p>
         But somehow, you made me believe again ✨  
-        You made love feel real and possible, like it could actually happen for me too 💖
       </p>
 
       <p>
-        You make me a better person without even trying 🥺  
-        And sometimes, you try very hard. I see that, too.  
         You make me feel seen, safe, and loved in ways I never expected 🤍
       </p>
 
       <p>
-        And yes, you can be absolutely crazy, a little unhinged, and sometimes very stupid 🙄😂  
-        But somehow, that just makes me love you even more 🥹💕
+        I love you bubby 🥹💕
       </p>
 
       <div class="caption">
@@ -197,13 +184,8 @@ header h1 {
 
 <script>
 const section = document.getElementById("gallerySection");
-
 window.addEventListener("scroll", () => {
-  if (window.scrollY > 40) {
-    section.classList.add("scrolled");
-  } else {
-    section.classList.remove("scrolled");
-  }
+  section.classList.toggle("scrolled", window.scrollY > 30);
 });
 </script>
 
