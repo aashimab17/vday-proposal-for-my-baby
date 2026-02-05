@@ -16,50 +16,48 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== HERO + SCROLL STACK ===== */
+/* SCROLL SPACE */
 .wrapper {
+  height: 200vh;
   position: relative;
-  height: 200vh; /* scroll space */
 }
 
-/* IMAGE LAYER */
-.image-layer {
+/* ===== IMAGE GRID ===== */
+.images {
   position: sticky;
   top: 0;
   height: 100vh;
-  padding: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   z-index: 1;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.4s ease;
 }
 
 h1 {
   text-align: center;
-  margin: 10px 0 18px;
-  font-size: 1.8rem;
+  margin: 8px 0 14px;
+  font-size: 1.7rem;
 }
 
-/* IMAGE GRID */
 .grid {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .grid img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border: 1.5px solid rgba(255,255,255,0.9);
-  border-radius: 14px;
-  background: rgba(255,255,255,0.05);
+  object-fit: cover; /* ✅ CROPPED 4:4 */
+  border-radius: 10px;
 }
 
-/* GRADIENT OVERLAY */
+/* ===== GRADIENT ===== */
 .gradient {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: linear-gradient(
     rgba(0,0,0,0) 20%,
@@ -67,20 +65,21 @@ h1 {
     rgba(0,0,0,0.75) 100%
   );
   opacity: 0;
-  transition: opacity 0.6s ease;
   z-index: 2;
   pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
-/* TEXT LAYER */
+/* ===== TEXT ===== */
 .text-layer {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 3;
+  z-index: 3; /* ABOVE GRADIENT */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
+  pointer-events: none;
 }
 
 .text-box {
@@ -88,7 +87,7 @@ h1 {
   text-align: center;
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
 .text-box.show {
@@ -99,34 +98,36 @@ h1 {
 .text-box p {
   font-size: 1.05rem;
   line-height: 1.8;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .caption {
   font-size: 0.9rem;
   opacity: 0.85;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 button {
-  margin-top: 30px;
-  padding: 14px 34px;
+  margin-top: 26px;
+  padding: 14px 36px;
   border-radius: 30px;
   border: none;
   background: #ff4d6d;
   color: white;
   font-size: 1rem;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 /* MOBILE */
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
   }
 
   h1 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 }
 </style>
@@ -136,8 +137,8 @@ button {
 
 <div class="wrapper">
 
-  <!-- IMAGE LAYER -->
-  <div class="image-layer" id="images">
+  <!-- IMAGES -->
+  <div class="images" id="images">
     <h1>Ugh. Look at us. Made for each other 💗</h1>
 
     <div class="grid">
@@ -199,17 +200,17 @@ const textBox = document.getElementById("textBox");
 const images = document.getElementById("images");
 
 window.addEventListener("scroll", () => {
-  const scroll = window.scrollY;
-  const fadeStart = window.innerHeight * 0.3;
-  const fadeEnd = window.innerHeight;
+  const scrollY = window.scrollY;
+  const trigger = window.innerHeight * 0.3;
 
-  const progress = Math.min(Math.max((scroll - fadeStart) / (fadeEnd - fadeStart), 0), 1);
-
-  gradient.style.opacity = progress;
-  images.style.opacity = 1 - progress * 0.7;
-
-  if (progress > 0.4) {
+  if (scrollY > trigger) {
+    gradient.style.opacity = 1;
     textBox.classList.add("show");
+    images.style.opacity = 0.35;
+  } else {
+    gradient.style.opacity = 0;
+    textBox.classList.remove("show");
+    images.style.opacity = 1;
   }
 });
 
