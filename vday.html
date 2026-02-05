@@ -31,7 +31,6 @@ body {
 .heart {
   position: absolute;
   color: rgba(255,255,255,0.25);
-  font-size: 18px;
   animation: floatUp linear infinite;
 }
 
@@ -64,6 +63,7 @@ body {
   }
 }
 
+/* CARD */
 .card {
   background: rgba(255,255,255,0.55);
   backdrop-filter: blur(16px);
@@ -136,16 +136,15 @@ button {
 <div class="bg" id="bg"></div>
 
 <div class="card" id="card">
-  <h1>So… 💕</h1>
 
   <div id="textZone">
-  <h1>So… 💕</h1>
+    <h1>So… 💕</h1>
 
-  <p id="question">
-    Will you be my Valentine? 💌<br>
-    Like… officially. Properly. With feelings.
-  </p>
-</div>
+    <p id="question">
+      Will you be my Valentine? 💌<br>
+      Like… officially. Properly. With feelings.
+    </p>
+  </div>
 
   <div class="buttons">
     <button id="yesBtn" onclick="sayYes()">Yes 😌💖</button>
@@ -160,6 +159,7 @@ button {
       I love you 🥹💗✨
     </p>
   </div>
+
 </div>
 
 <script>
@@ -175,9 +175,9 @@ for (let i = 0; i < 40; i++) {
   bg.appendChild(h);
 }
 
-/* NO BUTTON LOGIC */
+/* NO BUTTON LOGIC — avoids text only */
 const noBtn = document.getElementById("noBtn");
-const card = document.getElementById("card");
+const textZone = document.getElementById("textZone");
 const question = document.getElementById("question");
 
 let noCount = 0;
@@ -195,17 +195,17 @@ const texts = [
 function moveNo() {
   noCount++;
 
-  const cardRect = card.getBoundingClientRect();
+  const textRect = textZone.getBoundingClientRect();
   let x, y;
 
   do {
     x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
     y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
   } while (
-    x > cardRect.left - 20 &&
-    x < cardRect.right &&
-    y > cardRect.top - 20 &&
-    y < cardRect.bottom
+    x < textRect.right &&
+    x + noBtn.offsetWidth > textRect.left &&
+    y < textRect.bottom &&
+    y + noBtn.offsetHeight > textRect.top
   );
 
   noBtn.style.left = x + "px";
