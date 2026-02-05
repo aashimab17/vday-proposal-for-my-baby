@@ -11,24 +11,33 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: #b11226; /* cherry red */
+  background: #b11226;
   color: white;
   overflow-x: hidden;
 }
 
-/* ===== FIRST SCREEN ===== */
-.hero {
-  min-height: 100vh;
-  padding: 24px 20px 30px;
+/* ===== HERO + SCROLL STACK ===== */
+.wrapper {
+  position: relative;
+  height: 200vh; /* scroll space */
+}
+
+/* IMAGE LAYER */
+.image-layer {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 20px;
   display: flex;
   flex-direction: column;
+  z-index: 1;
+  transition: opacity 0.6s ease;
 }
 
 h1 {
   text-align: center;
   margin: 10px 0 18px;
   font-size: 1.8rem;
-  font-weight: 600;
 }
 
 /* IMAGE GRID */
@@ -36,56 +45,46 @@ h1 {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 1fr;
   gap: 12px;
 }
 
 .grid img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* NO CROPPING */
-  background: rgba(255,255,255,0.05);
+  object-fit: contain;
   border: 1.5px solid rgba(255,255,255,0.9);
   border-radius: 14px;
+  background: rgba(255,255,255,0.05);
 }
 
-/* ===== SCROLL SECTION ===== */
-.scroll-zone {
-  position: relative;
-  min-height: 140vh;
-}
-
-/* fading images */
-.fade-layer {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  background: #b11226;
-  z-index: 1;
+/* GRADIENT OVERLAY */
+.gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0,0,0,0) 20%,
+    rgba(0,0,0,0.55) 55%,
+    rgba(0,0,0,0.75) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 2;
   pointer-events: none;
 }
 
-/* black gradient overlay */
-.fade-layer::after {
-  content: "";
+/* TEXT LAYER */
+.text-layer {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.55);
-}
-
-/* TEXT CONTENT */
-.text-content {
-  position: relative;
-  z-index: 2;
-  min-height: 140vh;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 20px;
 }
 
 .text-box {
-  max-width: 700px;
+  max-width: 720px;
   text-align: center;
   opacity: 0;
   transform: translateY(20px);
@@ -109,7 +108,6 @@ h1 {
   margin-top: 18px;
 }
 
-/* BUTTON */
 button {
   margin-top: 30px;
   padding: 14px 34px;
@@ -136,31 +134,33 @@ button {
 
 <body>
 
-<!-- FIRST SCREEN -->
-<section class="hero">
-  <h1>Ugh. Look at us. Made for each other 💗</h1>
+<div class="wrapper">
 
-  <div class="grid">
-    <img src="assets/images/photo1.jpg">
-    <img src="assets/images/photo2.jpg">
-    <img src="assets/images/photo3.jpg">
-    <img src="assets/images/photo4.jpg">
-    <img src="assets/images/photo5.jpg">
-    <img src="assets/images/photo6.jpg">
-    <img src="assets/images/photo7.jpg">
-    <img src="assets/images/photo8.jpg">
-    <img src="assets/images/photo9.jpg">
-    <img src="assets/images/photo10.jpg">
-    <img src="assets/images/photo11.jpg">
-    <img src="assets/images/photo12.jpg">
+  <!-- IMAGE LAYER -->
+  <div class="image-layer" id="images">
+    <h1>Ugh. Look at us. Made for each other 💗</h1>
+
+    <div class="grid">
+      <img src="assets/images/photo1.jpg">
+      <img src="assets/images/photo2.jpg">
+      <img src="assets/images/photo3.jpg">
+      <img src="assets/images/photo4.jpg">
+      <img src="assets/images/photo5.jpg">
+      <img src="assets/images/photo6.jpg">
+      <img src="assets/images/photo7.jpg">
+      <img src="assets/images/photo8.jpg">
+      <img src="assets/images/photo9.jpg">
+      <img src="assets/images/photo10.jpg">
+      <img src="assets/images/photo11.jpg">
+      <img src="assets/images/photo12.jpg">
+    </div>
   </div>
-</section>
 
-<!-- SCROLL EFFECT -->
-<section class="scroll-zone">
-  <div class="fade-layer"></div>
+  <!-- GRADIENT -->
+  <div class="gradient" id="gradient"></div>
 
-  <div class="text-content">
+  <!-- TEXT -->
+  <div class="text-layer">
     <div class="text-box" id="textBox">
 
       <p>
@@ -190,14 +190,25 @@ button {
       <button onclick="goNext()">Chal theek hai ab paka mat 😒</button>
     </div>
   </div>
-</section>
+
+</div>
 
 <script>
+const gradient = document.getElementById("gradient");
 const textBox = document.getElementById("textBox");
+const images = document.getElementById("images");
 
 window.addEventListener("scroll", () => {
-  const trigger = window.innerHeight * 0.6;
-  if (textBox.getBoundingClientRect().top < trigger) {
+  const scroll = window.scrollY;
+  const fadeStart = window.innerHeight * 0.3;
+  const fadeEnd = window.innerHeight;
+
+  const progress = Math.min(Math.max((scroll - fadeStart) / (fadeEnd - fadeStart), 0), 1);
+
+  gradient.style.opacity = progress;
+  images.style.opacity = 1 - progress * 0.7;
+
+  if (progress > 0.4) {
     textBox.classList.add("show");
   }
 });
