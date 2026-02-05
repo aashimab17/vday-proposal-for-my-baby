@@ -20,6 +20,24 @@ body {
   color: #4a1f2c;
 }
 
+/* CONFETTI */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 12px;
+  background: red;
+  top: -20px;
+  animation: fall linear forwards;
+  z-index: 999;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
 .card {
   background: rgba(255,255,255,0.5);
   backdrop-filter: blur(14px);
@@ -30,6 +48,8 @@ body {
   width: 90%;
   box-shadow: 0 40px 100px rgba(0,0,0,0.25);
   animation: fadeIn 0.8s ease;
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes fadeIn {
@@ -37,9 +57,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-h1 {
-  margin-bottom: 18px;
-}
+h1 { margin-bottom: 18px; }
 
 p {
   font-size: 1.1rem;
@@ -67,10 +85,11 @@ button {
 }
 
 #noBtn {
-  position: absolute;
+  position: fixed;
   background: white;
   color: #ff4d6d;
   border: 2px solid #ff4d6d;
+  z-index: 3;
 }
 
 .result {
@@ -126,13 +145,18 @@ const texts = [
   "I love you na please 🥺💗"
 ];
 
+/* MOVE NO ALL OVER THE SCREEN */
 function moveNo() {
   noCount++;
 
-  const x = Math.random() * 260 - 130;
-  const y = Math.random() * 140 - 70;
+  const maxX = window.innerWidth - noBtn.offsetWidth;
+  const maxY = window.innerHeight - noBtn.offsetHeight;
 
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
 
   if (noCount <= texts.length) {
     question.textContent = texts[noCount - 1];
@@ -141,10 +165,23 @@ function moveNo() {
   }
 }
 
+/* CONFETTI ON YES */
 function sayYes() {
   document.querySelector(".buttons").style.display = "none";
   question.style.display = "none";
   document.getElementById("result").style.display = "block";
+
+  for (let i = 0; i < 120; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background =
+      ["#ff4d6d","#ffd1dc","#ff9a9e","#ffffff"][Math.floor(Math.random()*4)];
+    c.style.animationDuration = 2 + Math.random() * 2 + "s";
+    document.body.appendChild(c);
+
+    setTimeout(() => c.remove(), 4000);
+  }
 }
 </script>
 
